@@ -36,12 +36,20 @@ int Alien::getType() {
 	return this->type;
 }
 
+sf::Vector2f Alien::getPos() {
+	return this->sprite.getPosition();
+}
+
 void Alien::place(sf::Vector2f vector) {
 	this->sprite.setPosition(vector);
 }
 
 void Alien::move(sf::Vector2f vector) {
 	this->sprite.move(vector);
+}
+
+void Alien::kill() {
+	this->type = 0;
 }
 
 bool Alien::checkWindowColision(sf::Vector2f vector) {

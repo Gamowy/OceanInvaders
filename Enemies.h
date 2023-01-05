@@ -24,6 +24,7 @@ public:
 	virtual ~Enemies();
 
 	//Functions
+	bool checkBulletColision(sf::Vector2f bulletpos);
 	void update();
 	void render(sf::RenderTarget* target);
 };

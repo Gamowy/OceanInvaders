@@ -1,5 +1,7 @@
 #include "GalaxyInvaders.h"
 #include "Game.h"
+#include <vector>
+#include <iostream>
 
 //Private functions
 void Game::initVariables() 
@@ -51,8 +53,19 @@ void Game::pollEvents()
 	}
 }
 
+void Game::updateColisions()
+{
+	std::vector<Bullet>* bulletsPtr = this->player.getBullets();
+	for (int i = 0; i < bulletsPtr->size(); i++) {
+		if (this->enemies.checkBulletColision(bulletsPtr->at(i).getPos())) {
+			bulletsPtr->erase(bulletsPtr->begin() + i);
+		}
+	}
+}
+
 void Game::update() {
 	this->pollEvents();
+	this->updateColisions();
 	this->player.update();
 	this->enemies.update();
 }

@@ -22,6 +22,11 @@ sf::Sprite Player::getShip()
 	return this->ship;
 }
 
+std::vector<Bullet>* Player::getBullets()
+{
+	return &this->bullets;
+}
+
 //Functions
 void Player::moveShip() 
 {
@@ -37,7 +42,7 @@ void Player::moveShip()
 }
 
 void Player::shoot() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > SHOOTING_SPEED) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > BULLET_DELAY) {
 		this->bullets.push_back(Bullet(this->shipPosition));
 		this->shootDelay.restart();
 	}
@@ -50,6 +55,10 @@ void Player::update()
 	//Update bullets
 	for (int i = 0; i < this->bullets.size(); i++) {
 		this->bullets.at(i).update();
+		if (this->bullets.at(i).outOfWindow()) 
+		{
+			this->bullets.erase(this->bullets.begin() + i);
+		}
 	}
 }
 

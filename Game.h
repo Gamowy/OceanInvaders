@@ -33,6 +33,7 @@ public:
 
 	//Functions
 	void pollEvents();
+	void updateColisions();
 	void update();
 	void render();
 };

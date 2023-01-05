@@ -19,6 +19,7 @@ public:
 
 	//Accessors
 	sf::Sprite getShip();
+	std::vector<Bullet>* getBullets();
 
 	//Functions
 	void moveShip();

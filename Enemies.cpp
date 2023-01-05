@@ -71,6 +71,23 @@ Enemies::~Enemies()
 
 //Functions
 
+bool Enemies::checkBulletColision(sf::Vector2f bulletPos)
+{
+	sf::Vector2f alienPos;
+	for (int i = 0; i < ALIEN_ROW; i++) {
+		for (int j = 0; j < ALIEN_COL; j++) {
+			if (this->aliens[i][j].getType() != 0) {
+				alienPos = this->aliens[i][j].getPos();
+				if ((bulletPos.x >= alienPos.x && bulletPos.x <= alienPos.x + ALIEN_WIDTH) && (bulletPos.y >= alienPos.y && bulletPos.y <= alienPos.y + ALIEN_HEIGHT)) {
+					this->aliens[i][j].kill();
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 void Enemies::update()
 {
 	this->moveEnemies();

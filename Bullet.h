@@ -12,7 +12,9 @@ public:
 	virtual ~Bullet();
 
 	//Functions
-	void update();
+	sf::Vector2f getPos();
 	void move();
+	bool outOfWindow();
+	void update();
 	void render(sf::RenderTarget* target);
 };

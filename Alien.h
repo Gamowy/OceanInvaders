@@ -13,8 +13,10 @@ public:
 
 	void initAlien(int type);
 	int getType();
+	sf::Vector2f getPos();
 	void place(sf::Vector2f vector);
 	void move(sf::Vector2f vector);
+	void kill();
 	bool checkWindowColision(sf::Vector2f vector);
 	void render(sf::RenderTarget* target);
 };
