@@ -13,15 +13,17 @@ void Enemies::initEnemies()
 	moveType = 2;
 	nextMoveType = 0;
 	moveDownLimiter = 0;
+	moveDownCounter++;
 }
 //Movement types DOWN = 0, LEFT = 1, RIGHT = 2
-void Enemies::moveEnemies() {
+void Enemies::move() {
 	sf::Vector2f moveSpeed;
 	switch (moveType) {
 	case 0:
 		moveSpeed.x = 0.f;
 		moveSpeed.y = ALIEN_SPEED;
 		moveDownLimiter += ALIEN_SPEED;
+		moveDownCounter++;
 		break;
 	case 1:
 		moveSpeed.x = -ALIEN_SPEED;
@@ -51,6 +53,24 @@ void Enemies::moveEnemies() {
 	}
 }
 
+std::mt19937 mt(time(nullptr));
+void Enemies::shoot() {
+	if (this->shootDelay.getElapsedTime().asSeconds() > ALIEN_BULLET_DELAY) {
+		int shooterIndex;
+		std::vector <int> possibleShooters;
+		for (int i = 0; i < ALIEN_ROW; i++) {
+			for (int j = 0; j < ALIEN_COL; j++) {
+				if (this->aliens[i][j].getType() != 0)
+					possibleShooters.push_back(i * 10 + j);
+			}
+		}
+		shooterIndex = possibleShooters.at(mt() % possibleShooters.size());
+		std::cout << shooterIndex << std::endl;
+		this->bullets.push_back(Bullet(this->aliens[shooterIndex / 10][shooterIndex % 10].getPosition(), 1));
+		shootDelay.restart();
+	}
+}
+
 //Constructor / Deconstructor
 Enemies::Enemies() 
 {
@@ -71,16 +91,34 @@ Enemies::~Enemies()
 
 //Functions
 
-bool Enemies::checkBulletColision(sf::Vector2f bulletPos)
+bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 {
-	sf::Vector2f alienPos;
+	sf::FloatRect alienBounds;
 	for (int i = 0; i < ALIEN_ROW; i++) {
 		for (int j = 0; j < ALIEN_COL; j++) {
 			if (this->aliens[i][j].getType() != 0) {
-				alienPos = this->aliens[i][j].getPos();
-				if ((bulletPos.x >= alienPos.x && bulletPos.x <= alienPos.x + ALIEN_WIDTH) && (bulletPos.y >= alienPos.y && bulletPos.y <= alienPos.y + ALIEN_HEIGHT)) {
+				alienBounds = this->aliens[i][j].getBounds();
+				if (alienBounds.intersects(bulletBounds)) {
 					this->aliens[i][j].kill();
+					enemyCount--;
 					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool Enemies::checkPlayerColision(sf::FloatRect playerPosition) {
+	sf::FloatRect alienBounds;
+	if (this->moveDownCounter > 11) {
+		for (int i = 0; i < ALIEN_ROW; i++) {
+			for (int j = 0; j < ALIEN_COL; j++) {
+				if (this->aliens[i][j].getType() != 0) {
+					alienBounds = this->aliens[i][j].getBounds();
+					if (alienBounds.intersects(playerPosition)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -90,15 +128,30 @@ bool Enemies::checkBulletColision(sf::Vector2f bulletPos)
 
 void Enemies::update()
 {
-	this->moveEnemies();
+	this->move();
+	this->shoot();
+
+	//Update bullets
+	for (int i = 0; i < this->bullets.size(); i++) {
+		this->bullets.at(i).update();
+		if (this->bullets.at(i).outOfWindow())
+		{
+			this->bullets.erase(this->bullets.begin() + i);
+		}
+	}
 }
 
 void Enemies::render(sf::RenderTarget* target)
 {
+	//Render Aliens
 	for (int i = 0; i < ALIEN_ROW; i++) {
 		for (int j = 0; j < ALIEN_COL; j++) {
 			if (this->aliens[i][j].getType() != 0)
 			this->aliens[i][j].render(target);
 		}
+	}
+	//Render Alien bullets
+	for (int i = 0; i < this->bullets.size(); i++) {
+		this->bullets.at(i).render(target);
 	}
 }

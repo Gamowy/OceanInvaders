@@ -1,12 +1,11 @@
 #include "GalaxyInvaders.h"
 #include "Game.h"
-#include <vector>
-#include <iostream>
 
 //Private functions
 void Game::initVariables() 
 {
 	this->window = nullptr;
+	gameOver = 0;
 }
 
 void Game::initWindow()
@@ -54,20 +53,35 @@ void Game::pollEvents()
 }
 
 void Game::updateColisions()
-{
+{	
+	//Bullet touching allien
 	std::vector<Bullet>* bulletsPtr = this->player.getBullets();
 	for (int i = 0; i < bulletsPtr->size(); i++) {
-		if (this->enemies.checkBulletColision(bulletsPtr->at(i).getPos())) {
+		if (this->enemies.checkBulletColision(bulletsPtr->at(i).getBounds())) {
 			bulletsPtr->erase(bulletsPtr->begin() + i);
 		}
+	}
+
+	//Alien touching player
+	if (this->enemies.checkPlayerColision(this->player.getBounds())) {
+		gameOver = -1;
 	}
 }
 
 void Game::update() {
-	this->pollEvents();
-	this->updateColisions();
-	this->player.update();
-	this->enemies.update();
+	if (!gameOver) {
+		this->pollEvents();
+		this->updateColisions();
+		this->player.update();
+		this->enemies.update();
+	}
+	else {
+		if (gameOver > 0)
+			std::cout << "You won.";
+		else
+			std::cout << "Game over.";
+		this->window->close();
+	}
 }
 
 void Game::render() {

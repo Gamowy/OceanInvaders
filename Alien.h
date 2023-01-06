@@ -1,7 +1,7 @@
 #pragma once
 class Alien {
 private:
-	//Alien types
+	//Variables
 	int type = 0;
 	sf::Texture texture;
 	sf::Sprite sprite;
@@ -11,9 +11,11 @@ public:
 	Alien();
 	virtual ~Alien();
 
+	//Functions
 	void initAlien(int type);
 	int getType();
-	sf::Vector2f getPos();
+	sf::Vector2f getPosition();
+	sf::FloatRect getBounds();
 	void place(sf::Vector2f vector);
 	void move(sf::Vector2f vector);
 	void kill();

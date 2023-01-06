@@ -1,6 +1,5 @@
 #include "GalaxyInvaders.h"
 #include "Bullet.h"
-#include <vector>
 
 #pragma once
 class Player {
@@ -22,9 +21,10 @@ public:
 	std::vector<Bullet>* getBullets();
 
 	//Functions
+	sf::FloatRect getBounds();
 	void moveShip();
 	void shoot();
-
+	
 	void update();
 	void render(sf::RenderTarget* target);
 };

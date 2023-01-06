@@ -28,6 +28,11 @@ std::vector<Bullet>* Player::getBullets()
 }
 
 //Functions
+sf::FloatRect Player::getBounds()
+{
+	return this->ship.getGlobalBounds();
+}
+
 void Player::moveShip() 
 {
 	//Player movement
@@ -43,7 +48,7 @@ void Player::moveShip()
 
 void Player::shoot() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > BULLET_DELAY) {
-		this->bullets.push_back(Bullet(this->shipPosition));
+		this->bullets.push_back(Bullet(this->shipPosition, 0));
 		this->shootDelay.restart();
 	}
 }

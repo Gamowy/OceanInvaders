@@ -9,6 +9,7 @@
 class Game {
 private:
 	//Variables
+	int gameOver;
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Texture backgroundTexture;

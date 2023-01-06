@@ -1,5 +1,6 @@
 #include "GalaxyInvaders.h"
 #include "Alien.h"
+#include "Bullet.h"
 
 //Constructor / Deconstructor
 Alien::Alien() 
@@ -36,8 +37,12 @@ int Alien::getType() {
 	return this->type;
 }
 
-sf::Vector2f Alien::getPos() {
+sf::Vector2f Alien::getPosition() {
 	return this->sprite.getPosition();
+}
+
+sf::FloatRect Alien::getBounds() {
+	return this->sprite.getGlobalBounds();
 }
 
 void Alien::place(sf::Vector2f vector) {
@@ -61,4 +66,5 @@ bool Alien::checkWindowColision(sf::Vector2f vector) {
 
 void Alien::render(sf::RenderTarget* target) {
 	target->draw(this->sprite);
+
 }

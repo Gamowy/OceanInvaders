@@ -4,15 +4,16 @@
 class Bullet {
 private:
 	//Variables
+	int type;
 	sf::RectangleShape rect;
 
 public:
 	//Constructor / Deconstructor
-	Bullet(sf::Vector2f playerPos);
+	Bullet(sf::Vector2f objectPos, int source);
 	virtual ~Bullet();
 
 	//Functions
-	sf::Vector2f getPos();
+	sf::FloatRect getBounds();
 	void move();
 	bool outOfWindow();
 	void update();
