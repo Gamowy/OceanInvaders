@@ -33,6 +33,15 @@ sf::FloatRect Player::getBounds()
 	return this->ship.getGlobalBounds();
 }
 
+bool Player::checkBulletColision(sf::FloatRect bulletBounds)
+{
+	sf::FloatRect playerBounds = this->ship.getGlobalBounds();
+	if (bulletBounds.intersects(playerBounds))
+		return true;
+	else
+		return false;
+}
+
 void Player::moveShip() 
 {
 	//Player movement

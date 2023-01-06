@@ -22,6 +22,7 @@ public:
 
 	//Functions
 	sf::FloatRect getBounds();
+	bool checkBulletColision(sf::FloatRect bulletBounds);
 	void moveShip();
 	void shoot();
 	

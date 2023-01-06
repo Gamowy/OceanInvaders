@@ -65,7 +65,6 @@ void Enemies::shoot() {
 			}
 		}
 		shooterIndex = possibleShooters.at(mt() % possibleShooters.size());
-		std::cout << shooterIndex << std::endl;
 		this->bullets.push_back(Bullet(this->aliens[shooterIndex / 10][shooterIndex % 10].getPosition(), 1));
 		shootDelay.restart();
 	}
@@ -90,6 +89,15 @@ Enemies::~Enemies()
 }
 
 //Functions
+
+int Enemies::getCount() {
+	return this->enemyCount;
+}
+
+std::vector<Bullet>* Enemies::getBullets()
+{
+	return &this->bullets;
+}
 
 bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 {

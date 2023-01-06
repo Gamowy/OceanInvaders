@@ -54,11 +54,19 @@ void Game::pollEvents()
 
 void Game::updateColisions()
 {	
-	//Bullet touching allien
-	std::vector<Bullet>* bulletsPtr = this->player.getBullets();
-	for (int i = 0; i < bulletsPtr->size(); i++) {
-		if (this->enemies.checkBulletColision(bulletsPtr->at(i).getBounds())) {
-			bulletsPtr->erase(bulletsPtr->begin() + i);
+	//Player bullet touching allien
+	std::vector<Bullet>* playerBulletsPtr = this->player.getBullets();
+	for (int i = 0; i < playerBulletsPtr->size(); i++) {
+		if (this->enemies.checkBulletColision(playerBulletsPtr->at(i).getBounds())) {
+			playerBulletsPtr->erase(playerBulletsPtr->begin() + i);
+		}
+	}
+
+	//Enemy bullet toucing player
+	std::vector<Bullet>* enemiesBulletsPtr = this->enemies.getBullets();
+	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
+		if (this->player.checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
+			gameOver = -1;
 		}
 	}
 
@@ -82,6 +90,8 @@ void Game::update() {
 			std::cout << "Game over.";
 		this->window->close();
 	}
+	if (this->enemies.getCount() == 0)
+		gameOver = 1;
 }
 
 void Game::render() {
