@@ -62,7 +62,7 @@ void Game::updateColisions()
 		}
 	}
 
-	//Enemy bullet toucing player
+	//Enemy bullet touching player
 	std::vector<Bullet>* enemiesBulletsPtr = this->enemies.getBullets();
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
 		if (this->player.checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
