@@ -13,12 +13,8 @@ private:
 	Alien** aliens;
 	std::vector<Bullet> bullets;
 	sf::Clock shootDelay;
-	int enemyMap[ALIEN_ROW][ALIEN_COL] ={ {1,1,1,1,1,1,1,1,1,1},
-										  {2,2,2,2,2,2,2,2,2,2},
-										  {3,3,3,3,3,3,3,3,3,3},
-					                      {3,3,3,3,3,3,3,3,3,3},
-					                      {2,2,2,2,2,2,2,2,2,2},
-					                      {1,1,1,1,1,1,1,1,1,1} };
+	int enemyMap[ALIEN_ROW][ALIEN_COL];
+
 	void initEnemies();
 	void move();
 	void shoot();

@@ -1,11 +1,13 @@
 #include "GalaxyInvaders.h"
 #include "Enemies.h"
+std::mt19937 mt(time(nullptr));
 
 //Private Functions
 void Enemies::initEnemies()
 {
 	for (int i = 0; i < ALIEN_ROW; i++) {
 		for (int j = 0; j < ALIEN_COL; j++) {
+			enemyMap[i][j] = mt() % 3 + 1;
 			aliens[i][j].initAlien(enemyMap[i][j]);
 			this->aliens[i][j].place(sf::Vector2f(50.f * j, 38.f * i));
 		}
@@ -53,7 +55,6 @@ void Enemies::move() {
 	}
 }
 
-std::mt19937 mt(time(nullptr));
 void Enemies::shoot() {
 	if (this->shootDelay.getElapsedTime().asSeconds() > ALIEN_BULLET_DELAY) {
 		int shooterIndex;
