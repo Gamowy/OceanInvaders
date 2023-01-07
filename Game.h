@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GalaxyInvaders.h"
 #include "Player.h"
 #include "Enemies.h"
@@ -14,6 +14,8 @@ private:
 	sf::VideoMode videoMode;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
+	sf::Font gameFont;
+	sf::Text gameOverMessage;
 	sf::Event ev;
 
 	//Game objects

@@ -1,4 +1,4 @@
-#include "GalaxyInvaders.h"
+﻿#include "GalaxyInvaders.h"
 #include "Game.h"
 
 //Private functions
@@ -6,6 +6,10 @@ void Game::initVariables()
 {
 	this->window = nullptr;
 	gameOver = 0;
+	this->gameFont.loadFromFile("Resources/RubikMaze.ttf");
+	this->gameOverMessage.setFont(gameFont);
+	this->gameOverMessage.setCharacterSize(64);
+	this->gameOverMessage.setFillColor(sf::Color::White);
 }
 
 void Game::initWindow()
@@ -77,30 +81,37 @@ void Game::updateColisions()
 }
 
 void Game::update() {
-	if (!gameOver) {
-		this->pollEvents();
+	this->pollEvents();
+	if (!this->gameOver) {
 		this->updateColisions();
 		this->player.update();
 		this->enemies.update();
 	}
 	else {
-		if (gameOver > 0)
-			std::cout << "You won.";
-		else
-			std::cout << "Game over.";
-		this->window->close();
+		if (this->gameOver > 0) {
+			this->gameOverMessage.setString(L"Wygrałeś");
+			this->gameOverMessage.setPosition(sf::Vector2f(145.f, 250.f));
+		}
+		else {
+			this->gameOverMessage.setString(L"Koniec gry");
+			this->gameOverMessage.setPosition(sf::Vector2f(125.f, 250.f));
+		}
 	}
+
 	if (this->enemies.getCount() == 0)
 		gameOver = 1;
 }
 
 void Game::render() {
 	this->window->clear();
-
-	//Render game window
 	this->window->draw(this->windowBackground);
-	this->player.render(this->window);
-	this->enemies.render(this->window);
-
+	//Render game window
+	if (!this->gameOver) {
+		this->player.render(this->window);
+		this->enemies.render(this->window);
+	}
+	else {
+		this->window->draw(this->gameOverMessage);
+	}
 	this->window->display();
 }
