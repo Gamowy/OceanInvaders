@@ -12,6 +12,7 @@ private:
 	int gameOver;
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
+	sf::Image windowIcon;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
 	sf::Font gameFont;
