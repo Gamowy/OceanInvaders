@@ -12,6 +12,9 @@ void Game::initVariables()
 	this->gameOverMessage.setFillColor(sf::Color::White);
 }
 
+//test
+
+
 void Game::initWindow()
 {
 	this->videoMode.width = WINDOW_WIDTH;

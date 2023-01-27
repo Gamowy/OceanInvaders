@@ -27,5 +27,5 @@ const int FISH_ROW = 6;
 const float FISH_WIDTH = 56.f;
 const float FISH_HEIGHT = 56.f;
 const float FISH_BULLET_SPEED = 3.f;
-const float FISH_BULLET_DELAY = 5000.f;
+const float FISH_BULLET_DELAY = 3.f;
 const float FISH_ANIMATION_TIME = 1.f;

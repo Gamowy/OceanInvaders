@@ -4,12 +4,11 @@
 //Constructor / Deconstructor
 Player::Player()
 {
-	this->sharkPosition.x = 352.f;
-	this->sharkPosition.y = 805.f;
 	this->sharkTexture1.loadFromFile("Assets/Images/player1.png");
 	this->sharkTexture2.loadFromFile("Assets/Images/player2.png");
 	this->shark.setTexture(sharkTexture1);
-	this->shark.setPosition(sharkPosition);
+	this->bulletTexture.loadFromFile("Assets/Images/bubble.png");
+	this->shark.setPosition(sf::Vector2f(352.f, 805.f));
 }
 
 Player::~Player() 
@@ -46,21 +45,20 @@ bool Player::checkBulletColision(sf::FloatRect bulletBounds)
 void Player::moveShark() 
 {
 	//Player movement
-	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && this->sharkPosition.x - PLAYER_SPEED >= 0.f) {
-		this->sharkPosition.x -= PLAYER_SPEED;
+	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && this->shark.getPosition().x - PLAYER_SPEED >= 0.f) {
+
 		this->shark.setTexture(this->sharkTexture2, true);
-		this->shark.setPosition(sharkPosition);
+		this->shark.move(sf::Vector2f(-PLAYER_SPEED, 0.f));
 	}
-	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && this->sharkPosition.x + PLAYER_SPEED <= WINDOW_WIDTH - 81.f) {
-		this->sharkPosition.x += PLAYER_SPEED;
+	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && this->shark.getPosition().x + PLAYER_SPEED <= WINDOW_WIDTH - 81.f) {
 		this->shark.setTexture(this->sharkTexture1, true);
-		this->shark.setPosition(sharkPosition);
+		this->shark.move(sf::Vector2f(PLAYER_SPEED, 0.f));
 	}
 }
 
 void Player::shoot() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > BULLET_DELAY) {
-		this->bullets.push_back(Bullet(this->sharkPosition, 0));
+		this->bullets.push_back(Bullet(this->shark.getPosition(), 0, &bulletTexture));
 		this->shootDelay.restart();
 	}
 }

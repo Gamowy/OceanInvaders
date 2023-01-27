@@ -6,8 +6,8 @@ class Player {
 private:
 	//Variables
 	sf::Texture sharkTexture1, sharkTexture2;
+	sf::Texture bulletTexture;
 	sf::Sprite shark;
-	sf::Vector2f sharkPosition;
 	sf::Clock shootDelay;
 	std::vector<Bullet> bullets;
 

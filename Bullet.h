@@ -5,11 +5,11 @@ class Bullet {
 private:
 	//Variables
 	int type;
-	sf::RectangleShape rect;
+	sf::Sprite bubble;
 
 public:
 	//Constructor / Deconstructor
-	Bullet(sf::Vector2f objectPos, int source);
+	Bullet(sf::Vector2f objectPos, int source, sf::Texture* bubbleTexture);
 	virtual ~Bullet();
 
 	//Functions

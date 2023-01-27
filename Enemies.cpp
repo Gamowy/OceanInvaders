@@ -13,9 +13,7 @@ void Enemies::initEnemies()
 		}
 	}
 	this->moveType = 2;
-	this->nextMoveType = 0;
-	this->moveDownLimiter = 0;
-	this->moveDownCounter = 0;
+	this->bulletTexture.loadFromFile("Assets/Images/enemyBubble.png");
 }
 //Movement types DOWN = 0, LEFT = 1, RIGHT = 2
 void Enemies::move() {
@@ -66,7 +64,7 @@ void Enemies::shoot() {
 			}
 		}
 		shooterIndex = possibleShooters.at(mt() % possibleShooters.size());
-		this->bullets.push_back(Bullet(this->fishes[shooterIndex / 10][shooterIndex % 10].getPosition(), 1));
+		this->bullets.push_back(Bullet(this->fishes[shooterIndex / 10][shooterIndex % 10].getPosition(), 1, &bulletTexture));
 		shootDelay.restart();
 	}
 }
