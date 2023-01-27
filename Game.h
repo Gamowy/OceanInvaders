@@ -15,6 +15,7 @@ private:
 	sf::Image windowIcon;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
+	sf::Music backgroundMusic;
 	sf::Font gameFont;
 	sf::Text gameOverMessage;
 	sf::Event ev;

@@ -6,7 +6,7 @@ void Game::initVariables()
 {
 	this->window = nullptr;
 	gameOver = 0;
-	this->gameFont.loadFromFile("Resources/Fonts/RubikMaze.ttf");
+	this->gameFont.loadFromFile("Assets/Fonts/RubikMaze.ttf");
 	this->gameOverMessage.setFont(gameFont);
 	this->gameOverMessage.setCharacterSize(64);
 	this->gameOverMessage.setFillColor(sf::Color::White);
@@ -16,11 +16,12 @@ void Game::initWindow()
 {
 	this->videoMode.width = WINDOW_WIDTH;
 	this->videoMode.height = WINDOW_HEIGHT;
-	this->windowIcon.loadFromFile("Resources/Images/blueAlien.png");
-	this->window = new sf::RenderWindow(sf::VideoMode(this->videoMode), "GalaxyInvaders", sf::Style::Titlebar | sf::Style::Close);
+	this->windowIcon.loadFromFile("Assets/Images/jellyFish2.png");
+	this->window = new sf::RenderWindow(sf::VideoMode(this->videoMode), "OceanInvaders", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setIcon(this->windowIcon.getSize().x, this->windowIcon.getSize().y, this->windowIcon.getPixelsPtr());
-	this->backgroundTexture.loadFromFile("Resources/Images/space.png");
+	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
 	this->windowBackground.setTexture(this->backgroundTexture);
+	//this->backgroundMusic.openFromFile("8BitRetroFunk.ogg");
 	this->window->setFramerateLimit(FRAME_RATE);
 }
 

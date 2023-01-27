@@ -5,17 +5,18 @@
 //bullet types 0 = player bullet, 1 = allien bullet
 Bullet::Bullet(sf::Vector2f objectPos, int source)
 {
-	this->rect.setSize(sf::Vector2f(5.f, 20.f));
+	this->rect.setSize(sf::Vector2f(6.25f, 25.f));
+
 	if (source == 0) {
 		type = 0;
-		this->rect.setPosition(sf::Vector2f(objectPos.x + 27.5f, objectPos.y));
+		this->rect.setPosition(sf::Vector2f(objectPos.x + 40.5f, objectPos.y - 20.f));
 		this->rect.setFillColor(sf::Color::White);
 	}
 	else 
 	{
 		type = 1;
 		this->rect.setPosition(sf::Vector2f(objectPos.x + 19.5f, objectPos.y + 32.f));
-		this->rect.setFillColor(sf::Color::Red);
+		this->rect.setFillColor(sf::Color::Green);
 	}
 }
 
@@ -36,12 +37,12 @@ void Bullet::move() {
 	if(type == 0)
 		this->rect.move(sf::Vector2f(0.f, -BULLET_SPEED));
 	else
-		this->rect.move(sf::Vector2f(0.f, ALIEN_BULLET_SPEED));
+		this->rect.move(sf::Vector2f(0.f, FISH_BULLET_SPEED));
 }
 
 bool Bullet::outOfWindow()
 {
-	if (this->rect.getPosition().y < -20.f || this->rect.getPosition().y > 600.f)
+	if (this->rect.getPosition().y < -20.f || this->rect.getPosition().y > WINDOW_HEIGHT)
 		return true;
 	else
 		return false;

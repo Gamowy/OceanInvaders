@@ -5,17 +5,17 @@ std::mt19937 mt(time(nullptr));
 //Private Functions
 void Enemies::initEnemies()
 {
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		for (int j = 0; j < ALIEN_COL; j++) {
+	for (int i = 0; i < FISH_ROW; i++) {
+		for (int j = 0; j < FISH_COL; j++) {
 			enemyMap[i][j] = mt() % 3 + 1;
-			aliens[i][j].initAlien(enemyMap[i][j]);
-			this->aliens[i][j].place(sf::Vector2f(50.f * j, 38.f * i));
+			fishes[i][j].initFish(enemyMap[i][j]);
+			this->fishes[i][j].place(sf::Vector2f(56.f * j, 56.f * i));
 		}
 	}
-	moveType = 2;
-	nextMoveType = 0;
-	moveDownLimiter = 0;
-	moveDownCounter++;
+	this->moveType = 2;
+	this->nextMoveType = 0;
+	this->moveDownLimiter = 0;
+	this->moveDownCounter = 0;
 }
 //Movement types DOWN = 0, LEFT = 1, RIGHT = 2
 void Enemies::move() {
@@ -23,50 +23,50 @@ void Enemies::move() {
 	switch (moveType) {
 	case 0:
 		moveSpeed.x = 0.f;
-		moveSpeed.y = ALIEN_SPEED;
-		moveDownLimiter += ALIEN_SPEED;
-		moveDownCounter++;
+		moveSpeed.y = FISH_SPEED;
+		moveDownLimiter += FISH_SPEED;
 		break;
 	case 1:
-		moveSpeed.x = -ALIEN_SPEED;
+		moveSpeed.x = -FISH_SPEED;
 		moveSpeed.y = 0.f;
 		break;
 	case 2:
-		moveSpeed.x = ALIEN_SPEED;
+		moveSpeed.x = FISH_SPEED;
 		moveSpeed.y = 0.f;
 		break;
 	}
 
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		for (int j = 0; j < ALIEN_COL; j++) {
-			if (this->aliens[i][j].getType() != 0) {
-				this->aliens[i][j].move(moveSpeed);
-				if (moveType != 0 && this->aliens[i][j].checkWindowColision(moveSpeed)) {
+	for (int i = 0; i < FISH_ROW; i++) {
+		for (int j = 0; j < FISH_COL; j++) {
+			if (this->fishes[i][j].getType() != 0) {
+				this->fishes[i][j].move(moveSpeed);
+				if (moveType != 0 && this->fishes[i][j].checkWindowColision(moveSpeed)) {
 					nextMoveType = (moveType == 1) ? 2 : 1;
 					moveType = 0;
-					moveDownLimiter = 0;
 					break;
 				}
 			}
 		}
 	}
-	if (moveDownLimiter > ALIEN_HEIGHT) {
+	if (moveDownLimiter > FISH_HEIGHT) {
 		moveType = nextMoveType;
+		moveDownCounter++;
+		moveDownLimiter = 0;
 	}
 }
 
 void Enemies::shoot() {
-	if (this->shootDelay.getElapsedTime().asSeconds() > ALIEN_BULLET_DELAY) {
+	if (this->shootDelay.getElapsedTime().asSeconds() > FISH_BULLET_DELAY) {
 		int shooterIndex;
 		std::vector <int> possibleShooters;
-		for (int i = 0; i < ALIEN_ROW; i++) {
-			for (int j = 0; j < ALIEN_COL; j++) {
-				if (this->aliens[i][j].getType() != 0)
+		for (int i = 0; i < FISH_ROW; i++) {
+			for (int j = 0; j < FISH_COL; j++) {
+				if (this->fishes[i][j].getType() != 0)
 					possibleShooters.push_back(i * 10 + j);
 			}
 		}
 		shooterIndex = possibleShooters.at(mt() % possibleShooters.size());
-		this->bullets.push_back(Bullet(this->aliens[shooterIndex / 10][shooterIndex % 10].getPosition(), 1));
+		this->bullets.push_back(Bullet(this->fishes[shooterIndex / 10][shooterIndex % 10].getPosition(), 1));
 		shootDelay.restart();
 	}
 }
@@ -74,19 +74,19 @@ void Enemies::shoot() {
 //Constructor / Deconstructor
 Enemies::Enemies() 
 {
-	aliens = new Alien*[ALIEN_ROW];
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		aliens[i] = new Alien[ALIEN_COL];
+	fishes = new Fish*[FISH_ROW];
+	for (int i = 0; i < FISH_ROW; i++) {
+		fishes[i] = new Fish[FISH_COL];
 	}
 	this->initEnemies();
 }
 
 Enemies::~Enemies() 
 {
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		delete[] aliens[i];
+	for (int i = 0; i < FISH_ROW; i++) {
+		delete[] fishes[i];
 	}
-	delete[] aliens;
+	delete[] fishes;
 }
 
 //Functions
@@ -102,13 +102,13 @@ std::vector<Bullet>* Enemies::getBullets()
 
 bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 {
-	sf::FloatRect alienBounds;
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		for (int j = 0; j < ALIEN_COL; j++) {
-			if (this->aliens[i][j].getType() != 0) {
-				alienBounds = this->aliens[i][j].getBounds();
-				if (alienBounds.intersects(bulletBounds)) {
-					this->aliens[i][j].kill();
+	sf::FloatRect FishBounds;
+	for (int i = 0; i < FISH_ROW; i++) {
+		for (int j = 0; j < FISH_COL; j++) {
+			if (this->fishes[i][j].getType() != 0) {
+				FishBounds = this->fishes[i][j].getBounds();
+				if (FishBounds.intersects(bulletBounds)) {
+					this->fishes[i][j].kill();
 					enemyCount--;
 					return true;
 				}
@@ -119,13 +119,13 @@ bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 }
 
 bool Enemies::checkPlayerColision(sf::FloatRect playerPosition) {
-	sf::FloatRect alienBounds;
-	if (this->moveDownCounter > 11) {
-		for (int i = 0; i < ALIEN_ROW; i++) {
-			for (int j = 0; j < ALIEN_COL; j++) {
-				if (this->aliens[i][j].getType() != 0) {
-					alienBounds = this->aliens[i][j].getBounds();
-					if (alienBounds.intersects(playerPosition)) {
+	sf::FloatRect FishBounds;
+	if (this->moveDownCounter > 6) {
+		for (int i = 0; i < FISH_ROW; i++) {
+			for (int j = 0; j < FISH_COL; j++) {
+				if (this->fishes[i][j].getType() != 0) {
+					FishBounds = this->fishes[i][j].getBounds();
+					if (FishBounds.intersects(playerPosition)) {
 						return true;
 					}
 				}
@@ -152,14 +152,14 @@ void Enemies::update()
 
 void Enemies::render(sf::RenderTarget* target)
 {
-	//Render Aliens
-	for (int i = 0; i < ALIEN_ROW; i++) {
-		for (int j = 0; j < ALIEN_COL; j++) {
-			if (this->aliens[i][j].getType() != 0)
-			this->aliens[i][j].render(target);
+	//Render FISHs
+	for (int i = 0; i < FISH_ROW; i++) {
+		for (int j = 0; j < FISH_COL; j++) {
+			if (this->fishes[i][j].getType() != 0)
+			this->fishes[i][j].render(target);
 		}
 	}
-	//Render Alien bullets
+	//Render FISH bullets
 	for (int i = 0; i < this->bullets.size(); i++) {
 		this->bullets.at(i).render(target);
 	}

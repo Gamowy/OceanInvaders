@@ -1,19 +1,19 @@
 #pragma once
 #include "GalaxyInvaders.h"
-#include "Alien.h"
+#include "Fish.h"
 #include "Bullet.h"
 #include <vector>
 
 class Enemies {
 private:
 	//Variables
-	int enemyCount = ALIEN_ROW * ALIEN_COL;
+	int enemyCount = FISH_ROW * FISH_COL;
 	int moveType, nextMoveType, moveDownLimiter, moveDownCounter;
 	int aliensLeftBoundry, aliensRightBoundry;
-	Alien** aliens;
+	Fish** fishes;
 	std::vector<Bullet> bullets;
 	sf::Clock shootDelay;
-	int enemyMap[ALIEN_ROW][ALIEN_COL];
+	int enemyMap[FISH_ROW][FISH_COL];
 
 	void initEnemies();
 	void move();

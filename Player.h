@@ -5,9 +5,9 @@
 class Player {
 private:
 	//Variables
-	sf::Texture shipTexture;
-	sf::Sprite ship;
-	sf::Vector2f shipPosition;
+	sf::Texture sharkTexture1, sharkTexture2;
+	sf::Sprite shark;
+	sf::Vector2f sharkPosition;
 	sf::Clock shootDelay;
 	std::vector<Bullet> bullets;
 
@@ -17,13 +17,13 @@ public:
 	virtual ~Player();
 
 	//Accessors
-	sf::Sprite getShip();
+	sf::Sprite getShark();
 	std::vector<Bullet>* getBullets();
 
 	//Functions
 	sf::FloatRect getBounds();
 	bool checkBulletColision(sf::FloatRect bulletBounds);
-	void moveShip();
+	void moveShark();
 	void shoot();
 	
 	void update();

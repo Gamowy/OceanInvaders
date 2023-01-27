@@ -1,18 +1,19 @@
 #pragma once
-class Alien {
+class Fish {
 private:
 	//Variables
 	int type = 0;
-	sf::Texture texture;
+	sf::Texture texture1, texture2;
 	sf::Sprite sprite;
+	sf::Clock spriteAnimationDelay;
 
 public:
 	//Constructor / Deconstructor
-	Alien();
-	virtual ~Alien();
+	Fish();
+	virtual ~Fish();
 
 	//Functions
-	void initAlien(int type);
+	void initFish(int type);
 	int getType();
 	sf::Vector2f getPosition();
 	sf::FloatRect getBounds();
