@@ -3,7 +3,7 @@
 class Fish {
 private:
 	//Variables
-	int type = 0;
+	unsigned short type = 0;
 	sf::Texture texture1, texture2;
 	sf::Sprite sprite;
 	sf::Clock spriteAnimationDelay;

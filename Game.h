@@ -2,13 +2,12 @@
 #include "OceanInvaders.h"
 #include "Player.h"
 #include "Enemies.h"
-
-
+enum GameState {Menu, Running, Win, GameOver, Error};
 
 class Game {
 private:
 	//Variables
-	int gameOver;
+	GameState gameState;
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Image windowIcon;
@@ -16,7 +15,7 @@ private:
 	sf::Sprite windowBackground;
 	sf::Music backgroundMusic;
 	sf::Font gameFont;
-	sf::Text gameOverMessage;
+	sf::Text gameMessage;
 	sf::Event ev;
 
 	//Game objects

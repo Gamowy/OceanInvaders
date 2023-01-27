@@ -4,7 +4,7 @@
 class Bullet {
 private:
 	//Variables
-	int type;
+	unsigned short type;
 	sf::Sprite bubble;
 
 public:

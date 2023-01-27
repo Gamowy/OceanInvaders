@@ -7,14 +7,13 @@
 class Enemies {
 private:
 	//Variables
-	int enemyCount = FISH_ROW * FISH_COL;
-	int moveType{}, nextMoveType{}, moveDownLimiter{}, moveDownCounter{};
-	int aliensLeftBoundry, aliensRightBoundry;
+	unsigned short enemyCount = FISH_ROW * FISH_COL;
+	unsigned short moveType{}, nextMoveType{}, moveDownLimiter{}, moveDownCounter{};
 	Fish** fishes;
 	std::vector<Bullet> bullets;
 	sf::Texture bulletTexture;
 	sf::Clock shootDelay;
-	int enemyMap[FISH_ROW][FISH_COL];
+	unsigned short enemyMap[FISH_ROW][FISH_COL];
 
 	void initEnemies();
 	void move();

@@ -2,18 +2,16 @@
 #include "Game.h"
 
 //Private functions
+
 void Game::initVariables() 
 {
 	this->window = nullptr;
-	gameOver = 0;
-	this->gameFont.loadFromFile("Assets/Fonts/RubikMaze.ttf");
-	this->gameOverMessage.setFont(gameFont);
-	this->gameOverMessage.setCharacterSize(64);
-	this->gameOverMessage.setFillColor(sf::Color::White);
+	gameState = GameState::Running;
+	this->gameFont.loadFromFile("Assets/Fonts/PressStart2P.ttf");
+	this->gameMessage.setFont(gameFont);
+	this->gameMessage.setCharacterSize(64);
+	this->gameMessage.setFillColor(sf::Color::White);
 }
-
-//test
-
 
 void Game::initWindow()
 {
@@ -78,48 +76,46 @@ void Game::updateColisions()
 	std::vector<Bullet>* enemiesBulletsPtr = this->enemies.getBullets();
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
 		if (this->player.checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
-			gameOver = -1;
+			this->gameState = GameState::GameOver;
 		}
 	}
 
 	//Alien touching player
 	if (this->enemies.checkPlayerColision(this->player.getBounds())) {
-		gameOver = -1;
+		this->gameState = GameState::GameOver;
 	}
 }
 
 void Game::update() {
 	this->pollEvents();
-	if (!this->gameOver) {
+	if (this->gameState == GameState::Running) {
 		this->updateColisions();
 		this->player.update();
 		this->enemies.update();
 	}
-	else {
-		if (this->gameOver > 0) {
-			this->gameOverMessage.setString(L"Wygrałeś");
-			this->gameOverMessage.setPosition(sf::Vector2f(145.f, 250.f));
-		}
-		else {
-			this->gameOverMessage.setString(L"Koniec gry");
-			this->gameOverMessage.setPosition(sf::Vector2f(125.f, 250.f));
-		}
+	else if (this->gameState == GameState::Win) {
+			this->gameMessage.setString(L"Wygrałeś");
+			this->gameMessage.setPosition(sf::Vector2f(145.f, 250.f));
+	}
+	else if (this->gameState == GameState::GameOver) {
+			this->gameMessage.setString(L"Koniec gry");
+			this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
 	}
 
 	if (this->enemies.getCount() == 0)
-		gameOver = 1;
+		gameState = GameState::Win;
 }
 
 void Game::render() {
 	this->window->clear();
 	this->window->draw(this->windowBackground);
 	//Render game window
-	if (!this->gameOver) {
+	if (this->gameState == GameState::Running) {
 		this->player.render(this->window);
 		this->enemies.render(this->window);
 	}
 	else {
-		this->window->draw(this->gameOverMessage);
+		this->window->draw(this->gameMessage);
 	}
 	this->window->display();
 }
