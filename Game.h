@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "GalaxyInvaders.h"
+#include "OceanInvaders.h"
 #include "Player.h"
 #include "Enemies.h"
 
@@ -15,7 +15,6 @@ private:
 	sf::Image windowIcon;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
-	sf::Music backgroundMusic;
 	sf::Font gameFont;
 	sf::Text gameOverMessage;
 	sf::Event ev;

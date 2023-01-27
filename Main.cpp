@@ -1,4 +1,4 @@
-#include "GalaxyInvaders.h"
+#include "OceanInvaders.h"
 #include "Game.h"
 
 int main()

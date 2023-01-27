@@ -1,4 +1,5 @@
 #pragma once
+#include "OceanInvaders.h"
 class Fish {
 private:
 	//Variables

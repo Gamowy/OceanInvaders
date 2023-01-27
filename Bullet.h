@@ -1,5 +1,5 @@
 #pragma once
-#include "GalaxyInvaders.h"
+#include "OceanInvaders.h"
 
 class Bullet {
 private:
