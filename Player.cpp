@@ -5,7 +5,7 @@
 Player::Player()
 {
 	this->sharkPosition.x = 352.f;
-	this->sharkPosition.y = 755.f;
+	this->sharkPosition.y = 805.f;
 	this->sharkTexture1.loadFromFile("Assets/Images/player1.png");
 	this->sharkTexture2.loadFromFile("Assets/Images/player2.png");
 	this->shark.setTexture(sharkTexture1);

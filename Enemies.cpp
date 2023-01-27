@@ -9,7 +9,7 @@ void Enemies::initEnemies()
 		for (int j = 0; j < FISH_COL; j++) {
 			enemyMap[i][j] = mt() % 3 + 1;
 			fishes[i][j].initFish(enemyMap[i][j]);
-			this->fishes[i][j].place(sf::Vector2f(56.f * j, 56.f * i));
+			this->fishes[i][j].place(sf::Vector2f(56.f * j, 56.f * i + 50.f));
 		}
 	}
 	this->moveType = 2;

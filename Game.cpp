@@ -17,11 +17,13 @@ void Game::initWindow()
 	this->videoMode.width = WINDOW_WIDTH;
 	this->videoMode.height = WINDOW_HEIGHT;
 	this->windowIcon.loadFromFile("Assets/Images/jellyFish2.png");
-	this->window = new sf::RenderWindow(sf::VideoMode(this->videoMode), "OceanInvaders", sf::Style::Titlebar | sf::Style::Close);
+	this->window = new sf::RenderWindow(sf::VideoMode(this->videoMode), "Ocean Invaders", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setIcon(this->windowIcon.getSize().x, this->windowIcon.getSize().y, this->windowIcon.getPixelsPtr());
 	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
 	this->windowBackground.setTexture(this->backgroundTexture);
-	//this->backgroundMusic.openFromFile("8BitRetroFunk.ogg");
+	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
+	this->backgroundMusic.setLoop(true);
+	this->backgroundMusic.play();
 	this->window->setFramerateLimit(FRAME_RATE);
 }
 

@@ -3,9 +3,6 @@
 #include "Player.h"
 #include "Enemies.h"
 
-/*
-	Class that acts as the game core.
-*/
 class Game {
 private:
 	//Variables
@@ -15,6 +12,7 @@ private:
 	sf::Image windowIcon;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
+	sf::Music backgroundMusic;
 	sf::Font gameFont;
 	sf::Text gameOverMessage;
 	sf::Event ev;

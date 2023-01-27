@@ -42,7 +42,7 @@ void Bullet::move() {
 
 bool Bullet::outOfWindow()
 {
-	if (this->rect.getPosition().y < -20.f || this->rect.getPosition().y > WINDOW_HEIGHT)
+	if (this->rect.getPosition().y < 50.f || this->rect.getPosition().y > WINDOW_HEIGHT)
 		return true;
 	else
 		return false;

@@ -12,7 +12,7 @@
 
 //Window
 const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 800;
+const int WINDOW_HEIGHT = 850;
 const int FRAME_RATE = 60;
 
 //Player
