@@ -7,6 +7,7 @@ enum GameState {Menu, Running, Win, GameOver, Error};
 class Game {
 private:
 	//Variables
+	bool buttonWasReleased;
 	GameState gameState;
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;

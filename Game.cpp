@@ -5,6 +5,7 @@
 
 void Game::initVariables() 
 {
+	buttonWasReleased = true;
 	this->window = nullptr;
 	this->gameState = GameState::Menu;
 	this->player = nullptr;
@@ -76,14 +77,16 @@ void Game::pollEvents()
 			this->window->close();
 			break;
 		case sf::Event::KeyPressed:
-			if (this->ev.key.code == sf::Keyboard::Escape)
-				this->window->close();
-			break;
-		case sf::Event::KeyReleased:
-			if (this->ev.key.code == sf::Keyboard::Space && (this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
+			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased && (this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
 				this->initObjects();
 				this->gameState = GameState::Running;
 			}
+			if (this->ev.key.code == sf::Keyboard::Escape)
+				this->window->close();
+			buttonWasReleased = false;
+			break;
+		case sf::Event::KeyReleased:
+			buttonWasReleased = true;
 			break;
 		}
 	}
