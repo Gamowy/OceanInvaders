@@ -5,9 +5,11 @@
 
 void Game::initVariables() 
 {
+	POINTS = 0;
+	DEPTH = 100;
 	buttonWasReleased = true;
 	this->window = nullptr;
-	this->gameState = GameState::GameOver;
+	this->gameState = GameState::Menu;
 	this->player = nullptr;
 	this->enemies = nullptr;
 
@@ -16,7 +18,18 @@ void Game::initVariables()
 	this->gameFont2.loadFromFile("Assets/Fonts/VT323.ttf");
 	this->gameMessage.setOutlineThickness(1.f);
 	this->gameMessage.setOutlineColor(sf::Color::Black);
-	this->gameMessage.setFillColor(sf::Color::White);
+
+	this->depthText.setCharacterSize(36);
+	this->pointsText.setCharacterSize(36);
+	this->depthText.setFont(gameFont2);
+	this->depthText.setPosition(sf::Vector2f(400.f, 0.f));
+	this->pointsText.setFont(gameFont2);
+	this->pointsText.setPosition(sf::Vector2f(5.f, 0.f));
+	this->depthText.setOutlineThickness(1.f);
+	this->pointsText.setOutlineThickness(1.f);
+	this->depthText.setOutlineColor(sf::Color::Black);
+	this->pointsText.setOutlineColor(sf::Color::Black);
+
 
 	//Window Background
 	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
@@ -102,6 +115,7 @@ void Game::updateColisions()
 	for (int i = 0; i < playerBulletsPtr->size(); i++) {
 		if (this->enemies->checkBulletColision(playerBulletsPtr->at(i).getBounds())) {
 			playerBulletsPtr->erase(playerBulletsPtr->begin() + i);
+			POINTS += 10;
 		}
 	}
 
@@ -129,6 +143,9 @@ void Game::update() {
 		this->updateColisions();
 		this->player->update();
 		this->enemies->update();
+		this->depthText.setString(L"Głebokość: " + std::to_wstring(DEPTH) + L" m p.p.m.");
+		this->pointsText.setString(L"Punkty: " + std::to_wstring(POINTS));
+
 		if (this->enemies->getCount() == 0)
 			gameState = GameState::Win;
 		break;
@@ -158,7 +175,7 @@ void Game::renderMessage() {
 		//Opis
 		this->gameMessage.setCharacterSize(42);
 		this->gameMessage.setFont(gameFont2);
-		this->gameMessage.setOutlineThickness(0.7f);
+		this->gameMessage.setOutlineThickness(1.f);
 
 		this->gameMessage.setString(L"Celem gry jest pokonanie morskich stworzeń i");
 		this->gameMessage.setPosition(sf::Vector2f(10.f, 100.f));
@@ -271,6 +288,8 @@ void Game::render() {
 		case GameState::Running:
 			this->player->render(this->window);
 			this->enemies->render(this->window);
+			this->window->draw(this->depthText);
+			this->window->draw(this->pointsText);
 			break;
 
 		case GameState::Win:

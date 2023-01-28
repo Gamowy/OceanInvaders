@@ -20,6 +20,7 @@ private:
 	//Text Variables
 	sf::Font gameFont1, gameFont2;
 	sf::Text gameMessage;
+	sf::Text depthText, pointsText;
 
 	//Game objects
 	Player* player;
