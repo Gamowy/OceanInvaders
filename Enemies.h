@@ -6,12 +6,13 @@
 
 class Enemies {
 private:
-	//Variables
+
 	unsigned short enemyCount = FISH_ROW * FISH_COL;
 	unsigned short moveType{}, nextMoveType{}, moveDownLimiter{}, moveDownCounter{};
 	Fish** fishes;
 	std::vector<Bullet> bullets;
 	sf::Texture bulletTexture;
+	float bulletDelay;
 	sf::Clock shootDelay;
 	unsigned short enemyMap[FISH_ROW][FISH_COL];
 
@@ -21,7 +22,7 @@ private:
 
 public:
 	//Constructor / Deconstructor
-	Enemies();
+	Enemies(float bulletDelayValue);
 	virtual ~Enemies();
 
 	//Functions

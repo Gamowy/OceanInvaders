@@ -7,8 +7,11 @@ enum GameState {Menu, Running, Win, GameOver, End, Error};
 
 class Game {
 private:
-	//Variablesz
-	unsigned int points, levelsPlayed;
+	//Variables
+	float fishBulletDelay;
+	float playerBulletDelay;
+	unsigned int points;
+	unsigned short levelsPlayed;
 	bool buttonWasReleased;
 	GameState gameState;
 	sf::RenderWindow* window;
@@ -17,6 +20,7 @@ private:
 	sf::Image windowIcon;
 	sf::Texture backgroundTexture;
 	sf::Sprite windowBackground;
+	sf::RectangleShape windowTint;
 	sf::Music backgroundMusic;
 
 	//Text Variables

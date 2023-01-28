@@ -5,8 +5,8 @@
 
 void Game::initVariables() 
 {
-	FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-	PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
+	fishBulletDelay = 2.8f; //2.8f - 1.f
+	playerBulletDelay = 0.3f; //0.3f - 1.f
 	this->points = 0;
 	this->levelsPlayed = 0;
 	this->buttonWasReleased = true;
@@ -36,6 +36,8 @@ void Game::initVariables()
 	//Window Background
 	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
 	this->windowBackground.setTexture(this->backgroundTexture);
+	this->windowTint.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+	this->windowTint.setFillColor(sf::Color(0, 0, 0, 0));
 
 	//Music
 	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
@@ -47,8 +49,8 @@ void Game::initGame() {
 	if (this->player != nullptr) {
 		delete this->player, enemies;
 	}
-	this->player = new Player;
-	this->enemies = new Enemies;
+	this->player = new Player(playerBulletDelay);
+	this->enemies = new Enemies(fishBulletDelay);
 }
 
 void Game::initWindow()
@@ -97,8 +99,9 @@ void Game::pollEvents()
 				else if (this->gameState == GameState::GameOver || this->gameState == GameState::End) {
 					points = 0;
 					levelsPlayed = 0;
-					FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-					PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
+					fishBulletDelay = 2.8f; //2.8f - 1.f
+					playerBulletDelay = 0.3f; //0.3f - 1.f
+					this->windowTint.setFillColor(sf::Color(0, 0, 0, 0));
 					this->gameState = GameState::Menu;
 				}
 			}
@@ -143,9 +146,10 @@ void Game::updateColisions()
 void Game::updateVariables() {
 	points += DEPTH_LEVELS[this->levelsPlayed];
 	this->levelsPlayed++;
-	FISH_BULLET_DELAY -= 0.2f;
+	fishBulletDelay -= 0.2f;
+	this->windowTint.setFillColor(sf::Color(0, 0, 0, 25.5 * this->levelsPlayed));
 	if (this->levelsPlayed > 4)
-		PLAYER_BULLET_DELAY += 0.f;
+		playerBulletDelay += 0.2f;
 }
 
 void Game::update() {
@@ -348,6 +352,7 @@ void Game::renderMessage() {
 void Game::render() {
 	this->window->clear();
 	this->window->draw(this->windowBackground);
+	this->window->draw(this->windowTint);
 
 	//Render game window
 	switch (this->gameState) {

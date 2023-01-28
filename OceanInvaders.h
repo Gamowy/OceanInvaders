@@ -9,9 +9,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-//Global variables
-static float FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-static float PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 
 //Constants
 const int DEPTH_LEVELS[10]{ 100, 500, 1000, 2000, 4000, 6000, 8000, 10000, 11000, 11034 };

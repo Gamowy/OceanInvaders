@@ -2,8 +2,9 @@
 #include "Player.h"
 
 //Constructor / Deconstructor
-Player::Player()
+Player::Player(float bulletDelayValue)
 {
+	this->bulletDelay = bulletDelayValue;
 	this->sharkTexture1.loadFromFile("Assets/Images/player1.png");
 	this->sharkTexture2.loadFromFile("Assets/Images/player2.png");
 	this->shark.setTexture(sharkTexture1);
@@ -57,7 +58,7 @@ void Player::moveShark()
 }
 
 void Player::shoot() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > PLAYER_BULLET_DELAY) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > this->bulletDelay) {
 		this->bullets.push_back(Bullet(this->shark.getPosition(), 0, &bulletTexture));
 		this->shootDelay.restart();
 	}

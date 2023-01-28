@@ -8,12 +8,13 @@ private:
 	sf::Texture sharkTexture1, sharkTexture2;
 	sf::Texture bulletTexture;
 	sf::Sprite shark;
+	float bulletDelay;
 	sf::Clock shootDelay;
 	std::vector<Bullet> bullets;
 
 public:
 	//Constructor / Deconstructor
-	Player();
+	Player(float bulletDelayValue);
 	virtual ~Player();
 
 	//Accessors

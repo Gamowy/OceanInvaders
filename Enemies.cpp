@@ -54,7 +54,7 @@ void Enemies::move() {
 }
 
 void Enemies::shoot() {
-	if (this->shootDelay.getElapsedTime().asSeconds() > FISH_BULLET_DELAY) {
+	if (this->shootDelay.getElapsedTime().asSeconds() > this->bulletDelay) {
 		int shooterIndex;
 		std::vector <int> possibleShooters;
 		for (int i = 0; i < FISH_ROW; i++) {
@@ -70,8 +70,9 @@ void Enemies::shoot() {
 }
 
 //Constructor / Deconstructor
-Enemies::Enemies() 
+Enemies::Enemies(float bulletDelayValue) 
 {
+	this->bulletDelay = bulletDelayValue;
 	fishes = new Fish*[FISH_ROW];
 	for (int i = 0; i < FISH_ROW; i++) {
 		fishes[i] = new Fish[FISH_COL];
