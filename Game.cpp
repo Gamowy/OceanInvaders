@@ -6,11 +6,25 @@
 void Game::initVariables() 
 {
 	this->window = nullptr;
-	gameState = GameState::Running;
-	this->gameFont.loadFromFile("Assets/Fonts/PressStart2P.ttf");
-	this->gameMessage.setFont(gameFont);
-	this->gameMessage.setCharacterSize(64);
+	gameState = GameState::Menu;
+
+	//Text
+	this->gameFont1.loadFromFile("Assets/Fonts/PressStart2P.ttf");
+	this->gameFont2.loadFromFile("Assets/Fonts/VT323.ttf");
+	this->gameMessage.setOutlineThickness(1.f);
+	this->gameMessage.setOutlineColor(sf::Color::Black);
 	this->gameMessage.setFillColor(sf::Color::White);
+	this->spacebarTexture.loadFromFile("Assets/Images/spacebar.png");
+	this->spacebarImg.setTexture(spacebarTexture);
+
+	//Window Background
+	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
+	this->windowBackground.setTexture(this->backgroundTexture);
+
+	//Music
+	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
+	this->backgroundMusic.setLoop(true);
+	this->backgroundMusic.play();
 }
 
 void Game::initWindow()
@@ -20,11 +34,6 @@ void Game::initWindow()
 	this->windowIcon.loadFromFile("Assets/Images/jellyFish2.png");
 	this->window = new sf::RenderWindow(sf::VideoMode(this->videoMode), "Ocean Invaders", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setIcon(this->windowIcon.getSize().x, this->windowIcon.getSize().y, this->windowIcon.getPixelsPtr());
-	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
-	this->windowBackground.setTexture(this->backgroundTexture);
-	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
-	this->backgroundMusic.setLoop(true);
-	this->backgroundMusic.play();
 	this->window->setFramerateLimit(FRAME_RATE);
 }
 
@@ -88,34 +97,141 @@ void Game::updateColisions()
 
 void Game::update() {
 	this->pollEvents();
-	if (this->gameState == GameState::Running) {
+
+	switch (this->gameState) {
+	case GameState::Running:
 		this->updateColisions();
 		this->player.update();
 		this->enemies.update();
-	}
-	else if (this->gameState == GameState::Win) {
-			this->gameMessage.setString(L"Wygrałeś");
-			this->gameMessage.setPosition(sf::Vector2f(145.f, 250.f));
-	}
-	else if (this->gameState == GameState::GameOver) {
-			this->gameMessage.setString(L"Koniec gry");
-			this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
+		break;
+
+	case GameState::Win:
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Wygrałeś");
+		this->gameMessage.setPosition(sf::Vector2f(145.f, 250.f));
+		break;
+
+	case GameState::GameOver: 
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Koniec gry");
+		this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
+		break;
 	}
 
 	if (this->enemies.getCount() == 0)
 		gameState = GameState::Win;
 }
 
+void Game::renderMenu() {
+	this->gameMessage.setFont(gameFont1);
+	this->gameMessage.setStyle(sf::Text::Regular);
+	this->gameMessage.setCharacterSize(48);
+
+	// "Ocean Invaders"
+	this->gameMessage.setString(L"Ocean Invaders");
+	this->gameMessage.setPosition(sf::Vector2f(66.f, 10.f));
+	this->window->draw(gameMessage);
+
+	//Opis
+	this->gameMessage.setCharacterSize(42);
+	this->gameMessage.setFont(gameFont2);
+	this->gameMessage.setOutlineThickness(0.7f);
+
+	this->gameMessage.setString(L"Celem gry jest pokonanie morskich stworzeń i");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 100.f));
+	this->window->draw(gameMessage);
+
+	this->gameMessage.setString(L"dostanie się na dno oceanu. Twoi przeciwnicy ");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 140.f));
+	this->window->draw(gameMessage);
+
+	this->gameMessage.setString(L"stają się coraz bardziej agresywni, im głębiej");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 180.f));
+	this->window->draw(gameMessage);
+
+	this->gameMessage.setString(L"schodzisz. Czy uda ci się dostać na same dno");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 220.f));
+	this->window->draw(gameMessage);
+
+	this->gameMessage.setString(L"Rowu Mariańskiego? (11 034 m p.p.m.)");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 260.f));
+	this->window->draw(gameMessage);
+
+	//Sterowanie
+	this->gameMessage.setStyle(sf::Text::Underlined);
+	this->gameMessage.setString(L"Sterowanie");
+	this->gameMessage.setPosition(sf::Vector2f(314.f, 320.f));
+	this->window->draw(gameMessage);
+
+	this->gameMessage.setStyle(sf::Text::Regular);
+	this->gameMessage.setString(L"Ruch graczem:");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 380.f));
+	this->window->draw(gameMessage);
+
+
+	sf::Texture aKeyTexture;
+	aKeyTexture.loadFromFile("Assets/Images/aButton.png");
+	sf::Sprite aKey(aKeyTexture);
+	aKey.setPosition(230.f, 385.f);
+	this->window->draw(aKey);
+
+	sf::Texture dKeyTexture;
+	dKeyTexture.loadFromFile("Assets/Images/dButton.png");
+	sf::Sprite dKey(dKeyTexture);
+	dKey.setPosition(275.f, 385.f);
+	this->window->draw(dKey);
+
+	sf::Texture leftArrTexture;
+	leftArrTexture.loadFromFile("Assets/Images/leftArr.png");
+	sf::Sprite leftArrKey(leftArrTexture);
+	leftArrKey.setPosition(330.f, 385.f);
+	this->window->draw(leftArrKey);
+
+	sf::Texture rightArrTexture;
+	rightArrTexture.loadFromFile("Assets/Images/rightArr.png");
+	sf::Sprite rightArrKey(rightArrTexture);
+	rightArrKey.setPosition(375.f, 385.f);
+	this->window->draw(rightArrKey);
+
+	this->gameMessage.setString(L"Strzelanie:");
+	this->gameMessage.setPosition(sf::Vector2f(10.f, 450.f));
+	this->window->draw(gameMessage);
+
+	this->spacebarImg.setPosition(sf::Vector2f(200.f, 455.f));
+	this->window->draw(spacebarImg);
+
+	//Rozpocznij
+	this->gameMessage.setString(L"Powodzenia!");
+	this->gameMessage.setPosition(sf::Vector2f(309.f, 525.f));
+	this->window->draw(gameMessage);
+
+	this->spacebarImg.setPosition(sf::Vector2f(290.f, 730.f));
+	this->gameMessage.setString(L"Naciśnij         aby rozpocząć");
+	this->gameMessage.setPosition(sf::Vector2f(145.f, 725.f));
+	this->window->draw(gameMessage);
+	this->window->draw(spacebarImg);
+
+}
+
 void Game::render() {
 	this->window->clear();
 	this->window->draw(this->windowBackground);
+
 	//Render game window
-	if (this->gameState == GameState::Running) {
-		this->player.render(this->window);
-		this->enemies.render(this->window);
+	switch (this->gameState) {
+		case GameState::Menu:;
+			this->renderMenu();
+			break;
+
+		case GameState::Running:
+			this->player.render(this->window);
+			this->enemies.render(this->window);
+			break;
+
+		default:
+			this->window->draw(this->gameMessage);
+			break;
 	}
-	else {
-		this->window->draw(this->gameMessage);
-	}
+
 	this->window->display();
 }
