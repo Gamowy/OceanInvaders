@@ -94,9 +94,11 @@ void Game::pollEvents()
 					this->initGame();
 					this->gameState = GameState::Running;
 				}
-				else if (this->gameState == GameState::GameOver) {
+				else if (this->gameState == GameState::GameOver || this->gameState == GameState::End) {
 					points = 0;
 					levelsPlayed = 0;
+					FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+					PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 					this->gameState = GameState::Menu;
 				}
 			}
@@ -127,8 +129,6 @@ void Game::updateColisions()
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
 		if (this->player->checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
 			this->gameState = GameState::GameOver;
-			FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-			PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 			return;
 		}
 	}
@@ -136,8 +136,6 @@ void Game::updateColisions()
 	//Alien touching player
 	if (this->enemies->checkPlayerColision(this->player->getBounds())) {
 		this->gameState = GameState::GameOver;
-		FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-		PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 		return;
 	}
 }
@@ -166,8 +164,6 @@ void Game::update() {
 			}
 			else {
 				this->gameState = GameState::End;
-				FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
-				PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 			}
 			this->updateVariables();
 		}
@@ -318,6 +314,34 @@ void Game::renderMessage() {
 		this->window->draw(gameMessage);
 		this->window->draw(spacebarKey);
 		break;
+
+		case GameState::End:
+			this->gameMessage.setCharacterSize(28);
+			this->gameMessage.setFont(gameFont1);
+			this->gameMessage.setString(L"Dotarłeś na dno oceanu!");
+			this->gameMessage.setPosition(sf::Vector2f(75.f, 280.f));
+			this->window->draw(gameMessage);
+
+			this->gameMessage.setCharacterSize(24);
+			this->gameMessage.setFont(gameFont1);
+			this->gameMessage.setString(L"Punkty: " + std::to_wstring(points));
+			this->gameMessage.setPosition(sf::Vector2f(30.f, 400.f));
+			this->window->draw(gameMessage);
+
+			this->gameMessage.setString(L"Poziom: " + std::to_wstring(DEPTH_LEVELS[this->levelsPlayed-1]) + L" m p.p.m.");
+			this->gameMessage.setPosition(sf::Vector2f(30.f, 450.f));
+			this->window->draw(gameMessage);
+
+			this->gameMessage.setCharacterSize(42);
+			this->gameMessage.setFont(gameFont2);
+			this->gameMessage.setOutlineThickness(0.7f);
+			spacebarKey.setPosition(sf::Vector2f(315.f, 730.f));
+			this->gameMessage.setString(L"Naciśnij         aby wrócić");
+			this->gameMessage.setPosition(sf::Vector2f(170.f, 725.f));
+			this->window->draw(gameMessage);
+			this->window->draw(spacebarKey);
+			break;
+		break;
 	}
 }
 
@@ -342,6 +366,9 @@ void Game::render() {
 			this->renderMessage();
 			break;
 		case GameState::GameOver:
+			this->renderMessage();
+			break;
+		case GameState::End:
 			this->renderMessage();
 			break;
 	}
