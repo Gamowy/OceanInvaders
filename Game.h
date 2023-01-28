@@ -20,8 +20,6 @@ private:
 	//Text Variables
 	sf::Font gameFont1, gameFont2;
 	sf::Text gameMessage;
-	sf::Sprite spacebarImg;
-	sf::Texture spacebarTexture;
 
 	//Game objects
 	Player* player;
@@ -42,7 +40,7 @@ public:
 	const bool running() const;
 
 	//Functions
-	void renderMenu();
+	void renderMessage();
 	void pollEvents();
 	void updateColisions();
 	void update();

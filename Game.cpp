@@ -7,7 +7,7 @@ void Game::initVariables()
 {
 	buttonWasReleased = true;
 	this->window = nullptr;
-	this->gameState = GameState::Menu;
+	this->gameState = GameState::GameOver;
 	this->player = nullptr;
 	this->enemies = nullptr;
 
@@ -17,8 +17,6 @@ void Game::initVariables()
 	this->gameMessage.setOutlineThickness(1.f);
 	this->gameMessage.setOutlineColor(sf::Color::Black);
 	this->gameMessage.setFillColor(sf::Color::White);
-	this->spacebarTexture.loadFromFile("Assets/Images/spacebar.png");
-	this->spacebarImg.setTexture(spacebarTexture);
 
 	//Window Background
 	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
@@ -77,9 +75,14 @@ void Game::pollEvents()
 			this->window->close();
 			break;
 		case sf::Event::KeyPressed:
-			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased && (this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
-				this->initObjects();
-				this->gameState = GameState::Running;
+			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased) {
+				if ((this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
+					this->initObjects();
+					this->gameState = GameState::Running;
+				}
+				else if (this->gameState == GameState::GameOver) {
+					this->gameState = GameState::Menu;
+				}
 			}
 			if (this->ev.key.code == sf::Keyboard::Escape)
 				this->window->close();
@@ -129,110 +132,130 @@ void Game::update() {
 		if (this->enemies->getCount() == 0)
 			gameState = GameState::Win;
 		break;
-
-	case GameState::Win:
-		this->gameMessage.setFont(gameFont1);
-		this->gameMessage.setString(L"Wygrałeś");
-		this->gameMessage.setPosition(sf::Vector2f(145.f, 250.f));
-		break;
-
-	case GameState::GameOver:
-		this->gameMessage.setFont(gameFont1);
-		this->gameMessage.setString(L"Koniec gry");
-		this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
-		break;
 	}
 }
 
-void Game::renderMenu() {
-	this->gameMessage.setFont(gameFont1);
-	this->gameMessage.setStyle(sf::Text::Regular);
-	this->gameMessage.setCharacterSize(48);
-
-	// "Ocean Invaders"
-	this->gameMessage.setString(L"Ocean Invaders");
-	this->gameMessage.setPosition(sf::Vector2f(66.f, 10.f));
-	this->window->draw(gameMessage);
-
-	//Opis
-	this->gameMessage.setCharacterSize(42);
-	this->gameMessage.setFont(gameFont2);
-	this->gameMessage.setOutlineThickness(0.7f);
-
-	this->gameMessage.setString(L"Celem gry jest pokonanie morskich stworzeń i");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 100.f));
-	this->window->draw(gameMessage);
-
-	this->gameMessage.setString(L"dostanie się na dno oceanu. Twoi przeciwnicy ");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 140.f));
-	this->window->draw(gameMessage);
-
-	this->gameMessage.setString(L"stają się coraz bardziej agresywni, im głębiej");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 180.f));
-	this->window->draw(gameMessage);
-
-	this->gameMessage.setString(L"schodzisz. Czy uda ci się dostać na same dno");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 220.f));
-	this->window->draw(gameMessage);
-
-	this->gameMessage.setString(L"Rowu Mariańskiego? (11 034 m p.p.m.)");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 260.f));
-	this->window->draw(gameMessage);
-
-	//Sterowanie
-	this->gameMessage.setStyle(sf::Text::Underlined);
-	this->gameMessage.setString(L"Sterowanie");
-	this->gameMessage.setPosition(sf::Vector2f(314.f, 320.f));
-	this->window->draw(gameMessage);
-
-	this->gameMessage.setStyle(sf::Text::Regular);
-	this->gameMessage.setString(L"Ruch graczem:");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 380.f));
-	this->window->draw(gameMessage);
-
-
-	sf::Texture aKeyTexture;
+void Game::renderMessage() {
+	sf::Texture aKeyTexture, dKeyTexture, leftArrTexture, rightArrTexture, spacebarTexture;
 	aKeyTexture.loadFromFile("Assets/Images/aButton.png");
-	sf::Sprite aKey(aKeyTexture);
-	aKey.setPosition(230.f, 385.f);
-	this->window->draw(aKey);
-
-	sf::Texture dKeyTexture;
 	dKeyTexture.loadFromFile("Assets/Images/dButton.png");
-	sf::Sprite dKey(dKeyTexture);
-	dKey.setPosition(275.f, 385.f);
-	this->window->draw(dKey);
-
-	sf::Texture leftArrTexture;
 	leftArrTexture.loadFromFile("Assets/Images/leftArr.png");
-	sf::Sprite leftArrKey(leftArrTexture);
-	leftArrKey.setPosition(330.f, 385.f);
-	this->window->draw(leftArrKey);
-
-	sf::Texture rightArrTexture;
 	rightArrTexture.loadFromFile("Assets/Images/rightArr.png");
-	sf::Sprite rightArrKey(rightArrTexture);
-	rightArrKey.setPosition(375.f, 385.f);
-	this->window->draw(rightArrKey);
+	spacebarTexture.loadFromFile("Assets/Images/spacebar.png");
+	sf::Sprite aKey(aKeyTexture), dKey(dKeyTexture), leftArrKey(leftArrTexture), rightArrKey(rightArrTexture), spacebarKey(spacebarTexture);
 
-	this->gameMessage.setString(L"Strzelanie:");
-	this->gameMessage.setPosition(sf::Vector2f(10.f, 450.f));
-	this->window->draw(gameMessage);
+	switch (this->gameState) {
+	case GameState::Menu:
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setStyle(sf::Text::Regular);
+		this->gameMessage.setCharacterSize(48);
 
-	this->spacebarImg.setPosition(sf::Vector2f(200.f, 455.f));
-	this->window->draw(spacebarImg);
+		// "Ocean Invaders"
+		this->gameMessage.setString(L"Ocean Invaders");
+		this->gameMessage.setPosition(sf::Vector2f(66.f, 10.f));
+		this->window->draw(gameMessage);
 
-	//Rozpocznij
-	this->gameMessage.setString(L"Powodzenia!");
-	this->gameMessage.setPosition(sf::Vector2f(309.f, 525.f));
-	this->window->draw(gameMessage);
+		//Opis
+		this->gameMessage.setCharacterSize(42);
+		this->gameMessage.setFont(gameFont2);
+		this->gameMessage.setOutlineThickness(0.7f);
 
-	this->spacebarImg.setPosition(sf::Vector2f(290.f, 730.f));
-	this->gameMessage.setString(L"Naciśnij         aby rozpocząć");
-	this->gameMessage.setPosition(sf::Vector2f(145.f, 725.f));
-	this->window->draw(gameMessage);
-	this->window->draw(spacebarImg);
+		this->gameMessage.setString(L"Celem gry jest pokonanie morskich stworzeń i");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 100.f));
+		this->window->draw(gameMessage);
 
+		this->gameMessage.setString(L"dostanie się na dno oceanu. Twoi przeciwnicy ");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 140.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setString(L"stają się coraz bardziej agresywni, im głębiej");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 180.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setString(L"schodzisz. Czy uda ci się dostać na same dno");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 220.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setString(L"Rowu Mariańskiego? (11 034 m p.p.m.)");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 260.f));
+		this->window->draw(gameMessage);
+
+		//Sterowanie
+		this->gameMessage.setStyle(sf::Text::Underlined);
+		this->gameMessage.setString(L"Sterowanie");
+		this->gameMessage.setPosition(sf::Vector2f(314.f, 320.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setStyle(sf::Text::Regular);
+		this->gameMessage.setString(L"Ruch graczem:");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 380.f));
+		this->window->draw(gameMessage);
+
+		aKey.setPosition(230.f, 385.f);
+		this->window->draw(aKey);
+		
+		dKey.setPosition(275.f, 385.f);
+		this->window->draw(dKey);
+
+		leftArrKey.setPosition(330.f, 385.f);
+		this->window->draw(leftArrKey);
+
+		rightArrKey.setPosition(375.f, 385.f);
+		this->window->draw(rightArrKey);
+
+		this->gameMessage.setString(L"Strzelanie:");
+		this->gameMessage.setPosition(sf::Vector2f(10.f, 450.f));
+		this->window->draw(gameMessage);
+
+		spacebarKey.setPosition(sf::Vector2f(200.f, 455.f));
+		this->window->draw(spacebarKey);
+
+		//Rozpocznij
+		this->gameMessage.setString(L"Powodzenia!");
+		this->gameMessage.setPosition(sf::Vector2f(309.f, 525.f));
+		this->window->draw(gameMessage);
+
+		spacebarKey.setPosition(sf::Vector2f(290.f, 730.f));
+		this->gameMessage.setString(L"Naciśnij         aby rozpocząć");
+		this->gameMessage.setPosition(sf::Vector2f(145.f, 725.f));
+		this->window->draw(gameMessage);
+		this->window->draw(spacebarKey);
+		break;
+
+	case GameState::Win:
+		this->gameMessage.setCharacterSize(48);
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Wygrałeś");
+		this->gameMessage.setPosition(sf::Vector2f(211.f, 280.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setCharacterSize(42);
+		this->gameMessage.setFont(gameFont2);
+		this->gameMessage.setOutlineThickness(0.7f);
+		spacebarKey.setPosition(sf::Vector2f(290.f, 730.f));
+		this->gameMessage.setString(L"Naciśnij         aby rozpocząć");
+		this->gameMessage.setPosition(sf::Vector2f(145.f, 725.f));
+		this->window->draw(gameMessage);
+		this->window->draw(spacebarKey);
+		break;
+
+	case GameState::GameOver:
+		this->gameMessage.setCharacterSize(48);
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Koniec gry");
+		this->gameMessage.setPosition(sf::Vector2f(163.f, 280.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setCharacterSize(42);
+		this->gameMessage.setFont(gameFont2);
+		this->gameMessage.setOutlineThickness(0.7f);
+		spacebarKey.setPosition(sf::Vector2f(315.f, 730.f));
+		this->gameMessage.setString(L"Naciśnij         aby wrócić");
+		this->gameMessage.setPosition(sf::Vector2f(170.f, 725.f));
+		this->window->draw(gameMessage);
+		this->window->draw(spacebarKey);
+		break;
+	}
 }
 
 void Game::render() {
@@ -242,7 +265,7 @@ void Game::render() {
 	//Render game window
 	switch (this->gameState) {
 		case GameState::Menu:;
-			this->renderMenu();
+			this->renderMessage();
 			break;
 
 		case GameState::Running:
@@ -250,10 +273,12 @@ void Game::render() {
 			this->enemies->render(this->window);
 			break;
 
-		default:
-			this->window->draw(this->gameMessage);
+		case GameState::Win:
+			this->renderMessage();
+			break;
+		case GameState::GameOver:
+			this->renderMessage();
 			break;
 	}
-
 	this->window->display();
 }
