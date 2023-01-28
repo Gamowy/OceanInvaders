@@ -230,7 +230,7 @@ void Game::renderMessage() {
 		this->gameMessage.setPosition(sf::Vector2f(10.f, 180.f));
 		this->window->draw(gameMessage);
 
-		this->gameMessage.setString(L"schodzisz. Czy uda ci się dostać na same dno");
+		this->gameMessage.setString(L"schodzisz. Czy uda ci się dostać na samo dno");
 		this->gameMessage.setPosition(sf::Vector2f(10.f, 220.f));
 		this->window->draw(gameMessage);
 
