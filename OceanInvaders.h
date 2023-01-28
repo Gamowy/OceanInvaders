@@ -10,12 +10,11 @@
 #include <SFML/Audio.hpp>
 
 //Global variables
-static int DEPTH = 100;
-static int POINTS = 0;
-static float FISH_BULLET_DELAY = 3.f; //2.8f - 1.f
-static float BULLET_DELAY = 0.3f; //0.3f - 1.f
+static float FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+static float PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 
 //Constants
+const int DEPTH_LEVELS[10]{ 100, 500, 1000, 2000, 4000, 6000, 8000, 10000, 11000, 11034 };
 
 //Window
 const int WINDOW_WIDTH = 800;
@@ -24,7 +23,7 @@ const int FRAME_RATE = 60;
 
 //Player
 const float PLAYER_SPEED = 5.f;
-const float BULLET_SPEED = 3.f; 
+const float PLAYER_BULLET_SPEED = 3.f; 
 
 //Fishes
 const float FISH_SPEED = 1.f;

@@ -5,9 +5,11 @@
 
 void Game::initVariables() 
 {
-	POINTS = 0;
-	DEPTH = 100;
-	buttonWasReleased = true;
+	FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+	PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
+	this->points = 0;
+	this->levelsPlayed = 0;
+	this->buttonWasReleased = true;
 	this->window = nullptr;
 	this->gameState = GameState::Menu;
 	this->player = nullptr;
@@ -41,13 +43,12 @@ void Game::initVariables()
 	this->backgroundMusic.play();
 }
 
-void Game::initObjects() {
+void Game::initGame() {
+	if (this->player != nullptr) {
+		delete this->player, enemies;
+	}
 	this->player = new Player;
 	this->enemies = new Enemies;
-}
-
-void Game::destroyObjects() {
-	delete this->player, enemies;
 }
 
 void Game::initWindow()
@@ -90,10 +91,12 @@ void Game::pollEvents()
 		case sf::Event::KeyPressed:
 			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased) {
 				if ((this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
-					this->initObjects();
+					this->initGame();
 					this->gameState = GameState::Running;
 				}
 				else if (this->gameState == GameState::GameOver) {
+					points = 0;
+					levelsPlayed = 0;
 					this->gameState = GameState::Menu;
 				}
 			}
@@ -115,7 +118,7 @@ void Game::updateColisions()
 	for (int i = 0; i < playerBulletsPtr->size(); i++) {
 		if (this->enemies->checkBulletColision(playerBulletsPtr->at(i).getBounds())) {
 			playerBulletsPtr->erase(playerBulletsPtr->begin() + i);
-			POINTS += 10;
+			points += 10;
 		}
 	}
 
@@ -124,6 +127,8 @@ void Game::updateColisions()
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
 		if (this->player->checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
 			this->gameState = GameState::GameOver;
+			FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+			PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 			return;
 		}
 	}
@@ -131,23 +136,41 @@ void Game::updateColisions()
 	//Alien touching player
 	if (this->enemies->checkPlayerColision(this->player->getBounds())) {
 		this->gameState = GameState::GameOver;
+		FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+		PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
 		return;
 	}
 }
 
+void Game::updateVariables() {
+	points += DEPTH_LEVELS[this->levelsPlayed];
+	this->levelsPlayed++;
+	FISH_BULLET_DELAY -= 0.2f;
+	if (this->levelsPlayed > 4)
+		PLAYER_BULLET_DELAY += 0.f;
+}
+
 void Game::update() {
 	this->pollEvents();
-
 	switch (this->gameState) {
 	case GameState::Running:
 		this->updateColisions();
 		this->player->update();
 		this->enemies->update();
-		this->depthText.setString(L"Głebokość: " + std::to_wstring(DEPTH) + L" m p.p.m.");
-		this->pointsText.setString(L"Punkty: " + std::to_wstring(POINTS));
+		this->pointsText.setString(L"Punkty: " + std::to_wstring(points));
+		this->depthText.setString(L"Głębokość: " + std::to_wstring(DEPTH_LEVELS[this->levelsPlayed]) + L" m p.p.m.");
 
-		if (this->enemies->getCount() == 0)
-			gameState = GameState::Win;
+		if (this->enemies->getCount() == 0) {
+			if (levelsPlayed < 9) {
+				this->gameState = GameState::Win;
+			}
+			else {
+				this->gameState = GameState::End;
+				FISH_BULLET_DELAY = 2.8f; //2.8f - 1.f
+				PLAYER_BULLET_DELAY = 0.3f; //0.3f - 1.f
+			}
+			this->updateVariables();
+		}
 		break;
 	}
 }
@@ -246,14 +269,27 @@ void Game::renderMessage() {
 		this->gameMessage.setPosition(sf::Vector2f(211.f, 280.f));
 		this->window->draw(gameMessage);
 
+		this->gameMessage.setCharacterSize(24);
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Punkty: " + std::to_wstring(points));
+		this->gameMessage.setPosition(sf::Vector2f(30.f, 400.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setString(L"Poziom: " + std::to_wstring(DEPTH_LEVELS[this->levelsPlayed-1]) + L" m p.p.m.");
+		this->gameMessage.setPosition(sf::Vector2f(30.f, 450.f));
+		this->window->draw(gameMessage);
+
 		this->gameMessage.setCharacterSize(42);
 		this->gameMessage.setFont(gameFont2);
+		this->gameMessage.setStyle(sf::Text::Regular);
 		this->gameMessage.setOutlineThickness(0.7f);
-		spacebarKey.setPosition(sf::Vector2f(290.f, 730.f));
-		this->gameMessage.setString(L"Naciśnij         aby rozpocząć");
-		this->gameMessage.setPosition(sf::Vector2f(145.f, 725.f));
+		spacebarKey.setPosition(sf::Vector2f(273.f, 730.f));
+		this->gameMessage.setString(L"Naciśnij         aby kontynuować");
+		this->gameMessage.setPosition(sf::Vector2f(127.f, 725.f));
 		this->window->draw(gameMessage);
 		this->window->draw(spacebarKey);
+
+
 		break;
 
 	case GameState::GameOver:
@@ -261,6 +297,16 @@ void Game::renderMessage() {
 		this->gameMessage.setFont(gameFont1);
 		this->gameMessage.setString(L"Koniec gry");
 		this->gameMessage.setPosition(sf::Vector2f(163.f, 280.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setCharacterSize(24);
+		this->gameMessage.setFont(gameFont1);
+		this->gameMessage.setString(L"Punkty: " + std::to_wstring(points));
+		this->gameMessage.setPosition(sf::Vector2f(30.f, 400.f));
+		this->window->draw(gameMessage);
+
+		this->gameMessage.setString(L"Poziom: " + std::to_wstring(DEPTH_LEVELS[this->levelsPlayed]) + L" m p.p.m.");
+		this->gameMessage.setPosition(sf::Vector2f(30.f, 450.f));
 		this->window->draw(gameMessage);
 
 		this->gameMessage.setCharacterSize(42);

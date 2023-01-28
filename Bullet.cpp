@@ -32,7 +32,7 @@ sf::FloatRect Bullet::getBounds() {
 
 void Bullet::move() {
 	if(type == 0)
-		this->bubble.move(sf::Vector2f(0.f, -BULLET_SPEED));
+		this->bubble.move(sf::Vector2f(0.f, -PLAYER_BULLET_SPEED));
 	else
 		this->bubble.move(sf::Vector2f(0.f, FISH_BULLET_SPEED));
 }

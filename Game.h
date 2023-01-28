@@ -2,11 +2,13 @@
 #include "OceanInvaders.h"
 #include "Player.h"
 #include "Enemies.h"
-enum GameState {Menu, Running, Win, GameOver, Error};
+
+enum GameState {Menu, Running, Win, GameOver, End, Error};
 
 class Game {
 private:
-	//Variables
+	//Variablesz
+	unsigned int points, levelsPlayed;
 	bool buttonWasReleased;
 	GameState gameState;
 	sf::RenderWindow* window;
@@ -28,8 +30,8 @@ private:
 
 	//Private functions
 	void initVariables();
-	void initObjects();
-	void destroyObjects();
+	void initGame();
+	void updateVariables();
 	void initWindow();
 
 public:

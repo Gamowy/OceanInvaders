@@ -57,7 +57,7 @@ void Player::moveShark()
 }
 
 void Player::shoot() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > BULLET_DELAY) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > PLAYER_BULLET_DELAY) {
 		this->bullets.push_back(Bullet(this->shark.getPosition(), 0, &bulletTexture));
 		this->shootDelay.restart();
 	}
