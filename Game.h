@@ -23,12 +23,15 @@ private:
 	sf::Texture spacebarTexture;
 
 	//Game objects
-	Player player;
-	Enemies enemies;
+	Player* player;
+	Enemies* enemies;
 
 	//Private functions
 	void initVariables();
+	void initObjects();
+	void destroyObjects();
 	void initWindow();
+
 public:
 	//Constructor / Deconstructor
 	Game();

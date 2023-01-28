@@ -6,7 +6,9 @@
 void Game::initVariables() 
 {
 	this->window = nullptr;
-	gameState = GameState::Menu;
+	this->gameState = GameState::Menu;
+	this->player = nullptr;
+	this->enemies = nullptr;
 
 	//Text
 	this->gameFont1.loadFromFile("Assets/Fonts/PressStart2P.ttf");
@@ -25,6 +27,15 @@ void Game::initVariables()
 	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
 	this->backgroundMusic.setLoop(true);
 	this->backgroundMusic.play();
+}
+
+void Game::initObjects() {
+	this->player = new Player;
+	this->enemies = new Enemies;
+}
+
+void Game::destroyObjects() {
+	delete this->player;
 }
 
 void Game::initWindow()
@@ -69,8 +80,10 @@ void Game::pollEvents()
 				this->window->close();
 			break;
 		case sf::Event::KeyReleased:
-			if (this->ev.key.code == sf::Keyboard::Space && this->gameState == GameState::Menu)
+			if (this->ev.key.code == sf::Keyboard::Space && (this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
+				this->initObjects();
 				this->gameState = GameState::Running;
+			}
 			break;
 		}
 	}
@@ -79,24 +92,28 @@ void Game::pollEvents()
 void Game::updateColisions()
 {	
 	//Player bullet touching allien
-	std::vector<Bullet>* playerBulletsPtr = this->player.getBullets();
+	std::vector<Bullet>* playerBulletsPtr = this->player->getBullets();
 	for (int i = 0; i < playerBulletsPtr->size(); i++) {
-		if (this->enemies.checkBulletColision(playerBulletsPtr->at(i).getBounds())) {
+		if (this->enemies->checkBulletColision(playerBulletsPtr->at(i).getBounds())) {
 			playerBulletsPtr->erase(playerBulletsPtr->begin() + i);
 		}
 	}
 
 	//Enemy bullet touching player
-	std::vector<Bullet>* enemiesBulletsPtr = this->enemies.getBullets();
+	std::vector<Bullet>* enemiesBulletsPtr = this->enemies->getBullets();
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
-		if (this->player.checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
+		if (this->player->checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
 			this->gameState = GameState::GameOver;
+			this->destroyObjects();
+			return;
 		}
 	}
 
 	//Alien touching player
-	if (this->enemies.checkPlayerColision(this->player.getBounds())) {
+	if (this->enemies->checkPlayerColision(this->player->getBounds())) {
 		this->gameState = GameState::GameOver;
+		this->destroyObjects();
+		return;
 	}
 }
 
@@ -106,8 +123,10 @@ void Game::update() {
 	switch (this->gameState) {
 	case GameState::Running:
 		this->updateColisions();
-		this->player.update();
-		this->enemies.update();
+		this->player->update();
+		this->enemies->update();
+		if (this->enemies->getCount() == 0)
+			gameState = GameState::Win;
 		break;
 
 	case GameState::Win:
@@ -122,9 +141,6 @@ void Game::update() {
 		this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
 		break;
 	}
-
-	if (this->enemies.getCount() == 0)
-		gameState = GameState::Win;
 }
 
 void Game::renderMenu() {
@@ -229,8 +245,8 @@ void Game::render() {
 			break;
 
 		case GameState::Running:
-			this->player.render(this->window);
-			this->enemies.render(this->window);
+			this->player->render(this->window);
+			this->enemies->render(this->window);
 			break;
 
 		default:

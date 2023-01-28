@@ -30,7 +30,6 @@ sf::FloatRect Bullet::getBounds() {
 	return this->bubble.getGlobalBounds();
 }
 
-
 void Bullet::move() {
 	if(type == 0)
 		this->bubble.move(sf::Vector2f(0.f, -BULLET_SPEED));
