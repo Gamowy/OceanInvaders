@@ -1,6 +1,7 @@
 #pragma once
 #include "OceanInvaders.h"
-class Fish {
+class Fish 
+{
 private:
 	//Variables
 	unsigned short type = 0;
@@ -9,7 +10,7 @@ private:
 	sf::Clock spriteAnimationDelay;
 
 public:
-	//Constructor / Deconstructor
+	//Constructor / Destructor
 	Fish();
 	virtual ~Fish();
 

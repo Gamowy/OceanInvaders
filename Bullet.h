@@ -1,14 +1,15 @@
 #pragma once
 #include "OceanInvaders.h"
 
-class Bullet {
+class Bullet 
+{
 private:
 	//Variables
 	unsigned short type;
 	sf::Sprite bubble;
 
 public:
-	//Constructor / Deconstructor
+	//Constructor / Destructor
 	Bullet(sf::Vector2f objectPos, int source, sf::Texture* bubbleTexture);
 	virtual ~Bullet();
 

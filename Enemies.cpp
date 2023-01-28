@@ -15,9 +15,11 @@ void Enemies::initEnemies()
 	this->moveType = 2;
 	this->bulletTexture.loadFromFile("Assets/Images/enemyBubble.png");
 }
-//Movement types DOWN = 0, LEFT = 1, RIGHT = 2
+
+//Movement types (DOWN = 0, LEFT = 1, RIGHT = 2)
 void Enemies::move() {
 	sf::Vector2f moveSpeed;
+	//Add speed in current direction of movement
 	switch (moveType) {
 	case 0:
 		moveSpeed.x = 0.f;
@@ -37,7 +39,9 @@ void Enemies::move() {
 	for (int i = 0; i < FISH_ROW; i++) {
 		for (int j = 0; j < FISH_COL; j++) {
 			if (this->fishes[i][j].getType() != 0) {
+				//Move fish if still alive
 				this->fishes[i][j].move(moveSpeed);
+				//Change move type if fish hits window border
 				if (moveType != 0 && this->fishes[i][j].checkWindowColision(moveSpeed)) {
 					nextMoveType = (moveType == 1) ? 2 : 1;
 					moveType = 0;
@@ -46,6 +50,7 @@ void Enemies::move() {
 			}
 		}
 	}
+	//Limit how long fishes move down
 	if (moveDownLimiter > FISH_HEIGHT) {
 		moveType = nextMoveType;
 		moveDownCounter++;
@@ -53,6 +58,7 @@ void Enemies::move() {
 	}
 }
 
+//Randomly pick a fish to shoot and create a bullet at it's location
 void Enemies::shoot() {
 	if (this->shootDelay.getElapsedTime().asSeconds() > this->bulletDelay) {
 		int shooterIndex;
@@ -69,7 +75,7 @@ void Enemies::shoot() {
 	}
 }
 
-//Constructor / Deconstructor
+//Constructor / Destructor
 Enemies::Enemies(float bulletDelayValue) 
 {
 	this->bulletDelay = bulletDelayValue;
@@ -90,15 +96,18 @@ Enemies::~Enemies()
 
 //Functions
 
+//Return the amount of enemies alive
 int Enemies::getCount() {
 	return this->enemyCount;
 }
 
+//Return bullets shot by enemies
 std::vector<Bullet>* Enemies::getBullets()
 {
 	return &this->bullets;
 }
 
+//Check if enemy is hit by a bullet
 bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 {
 	sf::FloatRect FishBounds;
@@ -117,6 +126,7 @@ bool Enemies::checkBulletColision(sf::FloatRect bulletBounds)
 	return false;
 }
 
+//Check if enemy colides with player
 bool Enemies::checkPlayerColision(sf::FloatRect playerPosition) {
 	sf::FloatRect FishBounds;
 	if (this->moveDownCounter > 6) {
@@ -151,14 +161,14 @@ void Enemies::update()
 
 void Enemies::render(sf::RenderTarget* target)
 {
-	//Render FISHs
+	//Render enemies
 	for (int i = 0; i < FISH_ROW; i++) {
 		for (int j = 0; j < FISH_COL; j++) {
 			if (this->fishes[i][j].getType() != 0)
 			this->fishes[i][j].render(target);
 		}
 	}
-	//Render FISH bullets
+	//Render bullets
 	for (int i = 0; i < this->bullets.size(); i++) {
 		this->bullets.at(i).render(target);
 	}

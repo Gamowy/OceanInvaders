@@ -1,8 +1,9 @@
+#pragma once
 #include "OceanInvaders.h"
 #include "Bullet.h"
 
-#pragma once
-class Player {
+class Player 
+{
 private:
 	//Variables
 	sf::Texture sharkTexture1, sharkTexture2;
@@ -13,7 +14,7 @@ private:
 	std::vector<Bullet> bullets;
 
 public:
-	//Constructor / Deconstructor
+	//Constructor / Destructor
 	Player(float bulletDelayValue);
 	virtual ~Player();
 

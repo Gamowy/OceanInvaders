@@ -4,9 +4,10 @@
 #include "Bullet.h"
 #include <vector>
 
-class Enemies {
+class Enemies 
+{
 private:
-
+	//Variables
 	unsigned short enemyCount = FISH_ROW * FISH_COL;
 	unsigned short moveType{}, nextMoveType{}, moveDownLimiter{}, moveDownCounter{};
 	Fish** fishes;
@@ -16,12 +17,13 @@ private:
 	sf::Clock shootDelay;
 	unsigned short enemyMap[FISH_ROW][FISH_COL];
 
+	//Private Functions
 	void initEnemies();
 	void move();
 	void shoot();
 
 public:
-	//Constructor / Deconstructor
+	//Constructor / Destructor
 	Enemies(float bulletDelayValue);
 	virtual ~Enemies();
 

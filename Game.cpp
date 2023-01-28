@@ -32,7 +32,6 @@ void Game::initVariables()
 	this->depthText.setOutlineColor(sf::Color::Black);
 	this->pointsText.setOutlineColor(sf::Color::Black);
 
-
 	//Window Background
 	this->backgroundTexture.loadFromFile("Assets/Images/ocean.jpg");
 	this->windowBackground.setTexture(this->backgroundTexture);
@@ -45,8 +44,10 @@ void Game::initVariables()
 	this->backgroundMusic.play();
 }
 
+//Create objects for new level
 void Game::initGame() {
-	if (this->player != nullptr) {
+	if (this->player != nullptr) 
+	{
 		delete this->player, enemies;
 	}
 	this->player = new Player(playerBulletDelay);
@@ -84,19 +85,24 @@ const bool Game::running() const
 //Functions
 void Game::pollEvents() 
 {
-	while (this->window->pollEvent(this->ev)) {
+	while (this->window->pollEvent(this->ev)) 
+	{
 		switch (this->ev.type) 
 		{
 		case sf::Event::Closed:
 			this->window->close();
 			break;
 		case sf::Event::KeyPressed:
-			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased) {
-				if ((this->gameState == GameState::Menu || this->gameState == GameState::Win)) {
+			//Press space to continue prompt
+			if (this->ev.key.code == sf::Keyboard::Space && buttonWasReleased) 
+			{
+				if ((this->gameState == GameState::Menu || this->gameState == GameState::Win)) 
+				{
 					this->initGame();
 					this->gameState = GameState::Running;
 				}
-				else if (this->gameState == GameState::GameOver || this->gameState == GameState::End) {
+				else if (this->gameState == GameState::GameOver || this->gameState == GameState::End) 
+				{
 					points = 0;
 					levelsPlayed = 0;
 					fishBulletDelay = 2.8f; //2.8f - 1.f
@@ -143,18 +149,27 @@ void Game::updateColisions()
 	}
 }
 
-void Game::updateVariables() {
+//Update variables after finishing a level
+void Game::updateVariables()
+{
 	points += DEPTH_LEVELS[this->levelsPlayed];
 	this->levelsPlayed++;
+	//Make fish shoot faster after each level finished
 	fishBulletDelay -= 0.2f;
+	//Tint window after each level finished
 	this->windowTint.setFillColor(sf::Color(0, 0, 0, 25.5 * this->levelsPlayed));
 	if (this->levelsPlayed > 4)
+	{
+		//Make player shoot slower
 		playerBulletDelay += 0.2f;
+	}
 }
 
-void Game::update() {
+void Game::update() 
+{
 	this->pollEvents();
-	switch (this->gameState) {
+	switch (this->gameState) 
+	{
 	case GameState::Running:
 		this->updateColisions();
 		this->player->update();
@@ -163,10 +178,12 @@ void Game::update() {
 		this->depthText.setString(L"Głębokość: " + std::to_wstring(DEPTH_LEVELS[this->levelsPlayed]) + L" m p.p.m.");
 
 		if (this->enemies->getCount() == 0) {
-			if (levelsPlayed < 9) {
+			if (levelsPlayed < 9) 
+			{
 				this->gameState = GameState::Win;
 			}
-			else {
+			else 
+			{
 				this->gameState = GameState::End;
 			}
 			this->updateVariables();
@@ -175,6 +192,7 @@ void Game::update() {
 	}
 }
 
+//Render messages when starting game and after wining or losing
 void Game::renderMessage() {
 	sf::Texture aKeyTexture, dKeyTexture, leftArrTexture, rightArrTexture, spacebarTexture;
 	aKeyTexture.loadFromFile("Assets/Images/aButton.png");
@@ -349,13 +367,15 @@ void Game::renderMessage() {
 	}
 }
 
-void Game::render() {
+void Game::render() 
+{
 	this->window->clear();
 	this->window->draw(this->windowBackground);
 	this->window->draw(this->windowTint);
 
 	//Render game window
-	switch (this->gameState) {
+	switch (this->gameState) 
+	{
 		case GameState::Menu:;
 			this->renderMessage();
 			break;

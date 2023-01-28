@@ -13,6 +13,7 @@ Fish::~Fish()
 
 }
 
+//Create fish depending on type (Red Fish - 1, Purple Fish - 2, Jelly Fish - 3)
 void Fish::initFish(int type) {
 	switch (type) {
 	case 1: 
@@ -40,22 +41,27 @@ void Fish::initFish(int type) {
 	}
 }
 
+//Return type of fish
 int Fish::getType() {
 	return this->type;
 }
 
+//Return position of fish
 sf::Vector2f Fish::getPosition() {
 	return this->sprite.getPosition();
 }
 
+//Return bounds of fish
 sf::FloatRect Fish::getBounds() {
 	return this->sprite.getGlobalBounds();
 }
 
+//Set position of fish
 void Fish::place(sf::Vector2f vector) {
 	this->sprite.setPosition(vector);
 }
 
+//Move fish by vector
 void Fish::move(sf::Vector2f vector) {
 	if (this->spriteAnimationDelay.getElapsedTime().asSeconds() > 2 * FISH_ANIMATION_TIME) {
 			this->sprite.setTexture(texture1, true);
@@ -67,10 +73,12 @@ void Fish::move(sf::Vector2f vector) {
 	this->sprite.move(vector);
 }
 
+//Kill fish if hit
 void Fish::kill() {
 	this->type = 0;
 }
 
+//Check if fish colides with border of window
 bool Fish::checkWindowColision(sf::Vector2f vector) {
 	if (this->sprite.getPosition().x + vector.x < 0.f || this->sprite.getPosition().x + vector.x > WINDOW_WIDTH - FISH_WIDTH)
 		return true;
@@ -78,7 +86,7 @@ bool Fish::checkWindowColision(sf::Vector2f vector) {
 		return false;
 }
 
+//Render fish
 void Fish::render(sf::RenderTarget* target) {
 	target->draw(this->sprite);
-
 }

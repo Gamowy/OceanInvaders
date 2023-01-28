@@ -23,6 +23,7 @@ sf::Sprite Player::getShark()
 	return this->shark;
 }
 
+//Return bullets fired by player
 std::vector<Bullet>* Player::getBullets()
 {
 	return &this->bullets;
@@ -34,6 +35,7 @@ sf::FloatRect Player::getBounds()
 	return this->shark.getGlobalBounds();
 }
 
+//Check if a bullet hits player
 bool Player::checkBulletColision(sf::FloatRect bulletBounds)
 {
 	sf::FloatRect playerBounds = this->shark.getGlobalBounds();
@@ -57,6 +59,7 @@ void Player::moveShark()
 	}
 }
 
+//Create a bullet at player position
 void Player::shoot() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootDelay.getElapsedTime().asSeconds() > this->bulletDelay) {
 		this->bullets.push_back(Bullet(this->shark.getPosition(), 0, &bulletTexture));

@@ -3,17 +3,16 @@
 #include "Player.h"
 #include "Enemies.h"
 
+//Possible game states
 enum GameState {Menu, Running, Win, GameOver, End, Error};
 
-class Game {
+class Game 
+{
 private:
 	//Variables
-	float fishBulletDelay;
-	float playerBulletDelay;
+	GameState gameState;
 	unsigned int points;
 	unsigned short levelsPlayed;
-	bool buttonWasReleased;
-	GameState gameState;
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event ev;
@@ -22,7 +21,10 @@ private:
 	sf::Sprite windowBackground;
 	sf::RectangleShape windowTint;
 	sf::Music backgroundMusic;
-
+	bool buttonWasReleased;
+	//Time between player/fish firing bullets
+	float fishBulletDelay;
+	float playerBulletDelay;
 	//Text Variables
 	sf::Font gameFont1, gameFont2;
 	sf::Text gameMessage;
@@ -39,7 +41,7 @@ private:
 	void initWindow();
 
 public:
-	//Constructor / Deconstructor
+	//Constructor / Destructor
 	Game();
 	virtual ~Game();
 	
