@@ -35,7 +35,7 @@ void Game::initObjects() {
 }
 
 void Game::destroyObjects() {
-	delete this->player;
+	delete this->player, enemies;
 }
 
 void Game::initWindow()
@@ -104,7 +104,6 @@ void Game::updateColisions()
 	for (int i = 0; i < enemiesBulletsPtr->size(); i++) {
 		if (this->player->checkBulletColision(enemiesBulletsPtr->at(i).getBounds())) {
 			this->gameState = GameState::GameOver;
-			this->destroyObjects();
 			return;
 		}
 	}
@@ -112,7 +111,6 @@ void Game::updateColisions()
 	//Alien touching player
 	if (this->enemies->checkPlayerColision(this->player->getBounds())) {
 		this->gameState = GameState::GameOver;
-		this->destroyObjects();
 		return;
 	}
 }
@@ -135,7 +133,7 @@ void Game::update() {
 		this->gameMessage.setPosition(sf::Vector2f(145.f, 250.f));
 		break;
 
-	case GameState::GameOver: 
+	case GameState::GameOver:
 		this->gameMessage.setFont(gameFont1);
 		this->gameMessage.setString(L"Koniec gry");
 		this->gameMessage.setPosition(sf::Vector2f(125.f, 250.f));
