@@ -67,6 +67,11 @@ void Game::pollEvents()
 		case sf::Event::KeyPressed:
 			if (this->ev.key.code == sf::Keyboard::Escape)
 				this->window->close();
+			break;
+		case sf::Event::KeyReleased:
+			if (this->ev.key.code == sf::Keyboard::Space && this->gameState == GameState::Menu)
+				this->gameState = GameState::Running;
+			break;
 		}
 	}
 }

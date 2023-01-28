@@ -7,15 +7,16 @@
 Bullet::Bullet(sf::Vector2f objectPos, int source, sf::Texture* bubbleTexture)
 {
 	this->bubble.setTexture(*bubbleTexture);
+	this->bubble.setScale(sf::Vector2f(1.25f, 1.25f));
 
 	if (source == 0) {
 		type = 0;
-		this->bubble.setPosition(sf::Vector2f(objectPos.x + 35.f, objectPos.y - 20.f));
+		this->bubble.setPosition(sf::Vector2f(objectPos.x + 32.5f, objectPos.y - 20.f));
 	}
 	else 
 	{
 		type = 1;
-		this->bubble.setPosition(sf::Vector2f(objectPos.x + 19.5f, objectPos.y + 32.f));
+		this->bubble.setPosition(sf::Vector2f(objectPos.x + 15.f, objectPos.y + 32.f));
 	}
 }
 
