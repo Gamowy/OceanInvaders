@@ -1,9 +1,7 @@
 x64
-GalaxyInvaders.vcxproj
-GalaxyInvaders.vcxproj.filters
-GalaxyInvaders.vcxproj.user
-/resource2.h
-/resource1.h
-/Resource.rc
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 /resource.h
-/Resource.aps
+*.rc
+*.aps
