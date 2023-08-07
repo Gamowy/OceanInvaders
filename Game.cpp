@@ -41,6 +41,7 @@ void Game::initVariables()
 	//Music
 	this->backgroundMusic.openFromFile("Assets/Audio/8BitRetroFunk.ogg");
 	this->backgroundMusic.setLoop(true);
+	this->backgroundMusic.setVolume(10.f);
 	this->backgroundMusic.play();
 }
 
