@@ -1,5 +1,5 @@
 # OceanInvaders
-A simple Space Invaders clone made written in C++ using SFML library.
+A simple Space Invaders clone written in C++ using SFML library.
 
 Instrukcja uruchomienia:
 1. Pobierz najnowszą paczkę .zip z releases i wypakuj ją
